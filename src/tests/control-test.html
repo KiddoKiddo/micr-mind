@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head>
+  <title>MICR Mind Control</title>
+  <style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font: 13px Helvetica, Arial; }
+  button { background-color: #4CAF50; border: none; color: white; padding: 15px 32px; text-align: center; font-size: 16px; }
+  textarea { width: 400px; height: 100px; }
+  #messages { list-style-type: none; margin: 0; padding: 0; }
+  #messages li { padding: 5px 10px; }
+  #messages li:nth-child(odd) { background: #eee; }
+  </style>
+</head>
+<body>
+  <div>
+    <button id="start-btn">Start</button>
+  </div>
+
+  <div>
+    <textarea id="transmit-body"></textarea>
+    <br>
+    <button id="transmit-btn">Transmit</button>
+  </div>
+  <div>
+    <button id="fault-btn">Send fault</button>
+  <div>
+
+  <!-- TWX testing -->
+  <div>
+    <input id="twx-method">
+    <br>
+    <button id="twx-btn">TWX</button>
+  </div>
+
+  <ul id="messages"></ul>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script>
+  $(function () {
+    const socket = io('/control');
+    socket.on('message', function(msg){
+      if(typeof msg === 'object') {
+        msg = JSON.stringify(msg);
+      }
+      $('#messages').append($('<li>').text(msg));
+    });
+
+    // Start
+    $('#start-btn').click(() => {
+      socket.emit('start');
+    })
+
+    // Trigger fault
+    $('#fault-btn').click(() => {
+      socket.emit('trigger', {fault: 'motor'});
+    })
+
+    // Transmit
+    $('#transmit-btn').click(() => {
+      socket.emit('transmit', $('#transmit-body').val());
+      $('#m').val('');
+      return false;
+    });
+
+    // Twx testing
+    $('#twx-btn').click(() => {
+      socket.emit('twx', $('#twx-method').val());
+    });
+  });
+  </script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+.error .pulse-disk {
+  fill: #ff3c64;
+}
+.error .pulse-circle, .error .pulse-circle-2 {
+  stroke: #ff3c64;
+}
+.error .pulse-circle,
+.error .pulse-circle-2 {
+  transform-origin: center;
+  stroke-width: 20;
+  fill: none;
+  transform: translate3d(0, 0, 0);
+}
+.error .pulse-disk {
+  r: 100;
+}
+.error .pulse-circle {
+  r: 80;
+  animation: pulse 1.5s cubic-bezier(0.12, 1.15, 0.87, 1.2) infinite;
+}
+.error .pulse-circle-2 {
+  r: 120;
+  animation: pulse-2 1.5s cubic-bezier(0.12, 1.15, 0.87, 1.2) infinite;
+}
+@keyframes pulse {
+  0% {
+    r: 80;
+  }
+  50% {
+    r: 180;
+    opacity: 1;
+  }
+  99% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+    r: 180;
+  }
+}
+@keyframes pulse-2 {
+  0% {
+    opacity: 1;
+  }
+  40% {
+    opacity: 0;
+  }
+  49% {
+    r: 180;
+    opacity: 0;
+  }
+  50% {
+    r: 80;
+    opacity: 1;
+  }
+  100% {
+    r: 180;
+    opacity: 1;
+  }
+}
+.ok .pulse-disk {
+  fill: #00c878;
+}
+.ok .pulse-circle, .ok .pulse-circle-2 {
+  stroke: #00c878;
+}
+.ok .pulse-circle,
+.ok .pulse-circle-2 {
+  transform-origin: center;
+  stroke-width: 20;
+  fill: none;
+  transform: translate3d(0, 0, 0);
+}
+.ok .pulse-disk {
+  r: 100;
+}
+.ok .pulse-circle {
+  r: 80;
+  animation: pulse-ok 3s cubic-bezier(0.09, 0.79, 0.55, 0.28) infinite;
+}
+@keyframes pulse-ok {
+  0% {
+    r: 80;
+  }
+  50% {
+    r: 120;
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+    r: 80;
+  }
+}

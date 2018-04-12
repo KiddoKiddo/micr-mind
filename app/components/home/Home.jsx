@@ -5,35 +5,37 @@ import menu from '../../menu';
 require('./Home.css');
 
 const Home = (props) => {
-  const { title, description, docsLink, github } = menu;
+  const { title, description, mindLink, github } = menu;
   const githubUrl = `https://ghbtns.com/github-btn.html?user=${github.user}&repo=${github.repository}`;
   return (
     <div className="home">
       <h1 className="title">{title}</h1>
       <p className="description">{description}</p>
-      <div className="buttons">
-        <iframe
-          src={`${githubUrl}&type=star&count=true&size=large`}
-          frameBorder="0"
-          scrolling="0"
-          width="160px"
-          height="30px"
-        />
-        <iframe
-          src={`${githubUrl}&type=fork&count=true&size=large`}
-          frameBorder="0"
-          scrolling="0"
-          width="158px"
-          height="30px"
-        />
-      </div>
+      {/*
+        <div className="buttons">
+          <iframe
+            src={`${githubUrl}&type=star&count=true&size=large`}
+            frameBorder="0"
+            scrolling="0"
+            width="160px"
+            height="30px"
+          />
+          <iframe
+            src={`${githubUrl}&type=fork&count=true&size=large`}
+            frameBorder="0"
+            scrolling="0"
+            width="158px"
+            height="30px"
+          />
+        </div>
+        */}
       <p className="documentation">
         <a
           className="docs-button"
-          onClick={() => props.handleLink(docsLink)}
+          onClick={() => props.handleLink(mindLink)}
         >
           <i className="fa fa-book" />
-          Documentation
+          Start
         </a>
       </p>
     </div>

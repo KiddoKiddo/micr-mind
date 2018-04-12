@@ -1,7 +1,7 @@
 {
-  "name": "react-spa-boilerplate",
+  "name": "micr-mind",
   "version": "0.0.1",
-  "description": "React SPA Boilerplate for open source projects.",
+  "description": "",
   "scripts": {
     "start": "webpack-dev-server --inline --content-base build/",
     "test": "./node_modules/.bin/mocha tests/**/*.spec.js --require babel-register",
@@ -18,27 +18,12 @@
       "tests/**"
     ],
     "extension": [
-      ".jsx"
+      ".jsx",
+      ".js",
+      ".css"
     ]
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/LucasBassetti/react-spa-boilerplate"
-  },
-  "keywords": [
-    "react",
-    "webpack",
-    "airbnb",
-    "eslint",
-    "boilerplate",
-    "starter",
-    "open source"
-  ],
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/LucasBassetti/react-spa-boilerplate/issues"
-  },
-  "homepage": "https://github.com/LucasBassetti/react-spa-boilerplate#readme",
   "devDependencies": {
     "autoprefixer": "^6.7.7",
     "babel-core": "^6.7.7",
@@ -66,10 +51,26 @@
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
+    "axios": "^0.18.0",
+    "express": "^4.16.3",
+    "javascript-state-machine": "^3.0.1",
     "jquery": "^3.2.1",
     "lodash": "^4.17.4",
     "prop-types": "^15.5.8",
     "react": "^15.4.2",
-    "react-dom": "^15.4.2"
+    "react-dom": "^15.4.2",
+    "react-motion": "^0.5.2",
+    "react-router-dom": "^4.2.2",
+    "shortid": "^2.2.8",
+    "socket.io": "^2.1.0",
+    "socket.io-client": "^2.1.0"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "test/*",
+      "docs/*",
+      "build/*"
+    ],
+    "delay": "2500"
   }
 }

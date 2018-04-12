@@ -1,0 +1,73 @@
+.story-container {
+  background: #131327;
+  height: 100vh;
+  width: 100vw;
+
+  position: relative;
+
+  /* flex layout */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+.story-msg-container {
+  width: 80%;
+}
+.story-msg {
+  position: relative;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 150px;
+  font-weight: bold;
+  margin: 0.2em 120px;
+}
+.story-msg:last-of-type {
+  color: rgba(255, 255, 255, 1);
+  font-size: 200px;
+  font-weight: bold;
+  margin-left: 120px;
+  padding:  0.2em;
+
+  background: #3D3C4D;
+  border-radius: 50px;
+}
+.story-msg-choices {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-60%);
+}
+.story-msg-choices button {
+  font-family: 'Quicksand', sans-serifbody;
+  font-size: 100px;
+  font-weight: bold;
+  border-radius: 20px;
+  background-color: #2276ab;
+  border: 0;
+  color: rgba(255, 255, 255, 0.8);
+  padding: 0.5em;
+  margin-right: 0.6em;
+  cursor: pointer;
+}
+.story-msg-choices button.ok {
+  background-color: #098434;
+}
+.story-msg-choices button.cancel {
+  background-color: #bd4a36;
+}
+.story-msg-choices button:hover{
+  transition-duration: 0.5s;
+  transform: scale(1.1);
+}
+.story-msg-selected {
+  font-size: 80px;
+  font-style: italic;
+  padding: 0 1em;
+}
+.story-blink-container {
+  position: absolute;
+  right: 100px;
+  top: 50%;
+  transform: translateY(-50%);
+  zoom: 2;
+}

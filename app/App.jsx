@@ -1,57 +1,18 @@
 import React, { Component } from 'react';
+import { Switch, Route } from 'react-router-dom';
 import Home from './components/home/Home';
 import Docs from './components/docs/Docs';
+import Mind from './components/mind/Mind';
+import Story from './components/story/Story';
+import menu from './menu';
 
-const $ = require('jquery');
-
-class App extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      link: '/',
-    };
-
-    this.handleLink = this.handleLink.bind(this);
-  }
-
-  componentWillMount() {
-    this.setState({ link: window.location.hash.replace('#', '') });
-  }
-
-  componentDidMount() {
-    $('pre code').each((i, block) => {
-      hljs.highlightBlock(block);
-    });
-  }
-
-  componentDidUpdate() {
-    $('pre code').each((i, block) => {
-      hljs.highlightBlock(block);
-    });
-  }
-
-  handleLink(link) {
-    window.location.hash = link;
-    this.setState({ link });
-  }
-
-  render() {
-    const { link } = this.state;
-    const isHome = link.indexOf('/docs') < 0;
-
-    return isHome ? (
-      <Home
-        link={link}
-        handleLink={this.handleLink}
-      />
-    ) : (
-      <Docs
-        link={link}
-        handleLink={this.handleLink}
-      />
-    );
-  }
-}
+const App = () => (
+  <Switch>
+    <Route exact path="/" component={Home} />
+    <Route path="/docs=" component={Docs} />
+    <Route path="/mind" component={Mind} />
+    <Route path="/story" component={Story} />
+  </Switch>
+);
 
 export default App;
