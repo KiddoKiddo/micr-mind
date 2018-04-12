@@ -5,21 +5,18 @@ const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
-const fsm = require('./src/finite-state-machine');
-const twx = require('./src/utils/twx');
-const nc = require('./src/utils/nervecenter');
+const fsm = require('./finite-state-machine');
+const twx = require('./utils/twx');
+const nc = require('./utils/nervecenter');
 
-// To serve the mind page
-app.use(express.static(`${__dirname}/build`));
+// To serve the react app build
+app.use(express.static(`${__dirname}/../build`));
 app.get('*', (request, response) => {
-  response.sendFile(path.resolve(__dirname, 'build', 'index.html'));
+  response.sendFile(path.resolve(__dirname, '../build/index.html'));
 });
 
 // To serve the test page
 app.use(express.static('server/tests/'));
-// app.get('/test', (req, res) => {
-//   res.sendFile(`${__dirname}/tests/${req.query.conn}-test.html`);
-// });
 
 // To init the socket io connection
 // Socket io connection for Mind UI

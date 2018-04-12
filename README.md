@@ -1,1 +1,1 @@
-# react-micr-mind
+# micr-mind
