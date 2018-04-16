@@ -9,6 +9,8 @@ module.exports = {
   devServer: {
     historyApiFallback: true,
     outputPath: path.join(__dirname, 'build'),
+    port: 8081,
+    host: '192.168.129.26',
   },
   resolve: {
     extensions: ['', '.js', '.jsx'],

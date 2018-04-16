@@ -70,6 +70,6 @@ fsm.observe('onFault', () => {
 
 
 // Start express server
-http.listen(process.env.PORT || 3000, () => {
+http.listen(process.env.PORT || 8082, () => {
   console.log('Listening on *:3000');
 });
