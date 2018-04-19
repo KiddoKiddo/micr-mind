@@ -3,7 +3,17 @@
   height: 100vh;
   width: 100vw;
 
-  position: relative;
+  display: grid;
+  grid-template-columns: 4800px;
+}
+.story-blink-container {
+  grid-column: 2/span 1;
+
+  zoom: 2;
+}
+.story-msg-container {
+  grid-column: 1/span 1;
+  height: 1080px;
 
   /* flex layout */
   display: flex;
@@ -11,26 +21,30 @@
   justify-content: flex-end;
   align-items: flex-start;
 }
-.story-msg-container {
-  width: 80%;
-}
 .story-msg {
   position: relative;
   color: rgba(255, 255, 255, 0.7);
-  font-size: 150px;
+  font-size: 80px;
   font-weight: bold;
-  margin: 0.2em 120px;
+  margin-top: 0.2em;
+  margin-left: 120px;
 }
 .story-msg:last-of-type {
+  width: 4600px;
+
   color: rgba(255, 255, 255, 1);
-  font-size: 200px;
+  font-size: 100px;
   font-weight: bold;
-  margin-left: 120px;
-  padding:  0.2em;
+  margin-left: 70px;
+  margin-bottom: 70px;
+  padding: 50px;
 
   background: #3D3C4D;
   border-radius: 50px;
 }
+/* .story-msg:last-of-type .story-msg-text {
+  animation: breathing 5s ease-out infinite normal;
+} */
 .story-msg-choices {
   position: absolute;
   right: 0;
@@ -38,16 +52,17 @@
   transform: translateY(-60%);
 }
 .story-msg-choices button {
-  font-family: 'Quicksand', sans-serifbody;
-  font-size: 100px;
+  font-family: 'Montserrat', sans-serifbody;
+  font-size: 60px;
   font-weight: bold;
   border-radius: 20px;
   background-color: #2276ab;
   border: 0;
   color: rgba(255, 255, 255, 0.8);
-  padding: 0.5em;
+  padding: 0.3em 0.5em;
   margin-right: 0.6em;
   cursor: pointer;
+  transition-duration: 0.5s;
 }
 .story-msg-choices button.ok {
   background-color: #098434;
@@ -55,19 +70,19 @@
 .story-msg-choices button.cancel {
   background-color: #bd4a36;
 }
-.story-msg-choices button:hover{
-  transition-duration: 0.5s;
+.story-msg-choices button:hover,
+.story-msg-choices button:focus{
   transform: scale(1.1);
+  outline:0;
 }
 .story-msg-selected {
   font-size: 80px;
   font-style: italic;
   padding: 0 1em;
 }
-.story-blink-container {
-  position: absolute;
-  right: 100px;
-  top: 50%;
-  transform: translateY(-50%);
-  zoom: 2;
+
+@keyframes breathing {
+  0% { transform: scale(0.95);}
+  60% { transform: scale(1); }
+  100% { transform: scale(0.95); }
 }

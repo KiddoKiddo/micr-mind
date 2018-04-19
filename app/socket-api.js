@@ -1,4 +1,7 @@
 import socketio from 'socket.io-client';
 
-const io = socketio('http://localhost:3000/mind');
+const io = (path) => {
+  if (path) return socketio(path);
+  return socketio('/mind');
+};
 export default io;

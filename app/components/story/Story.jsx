@@ -1,24 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import io from '../../socket-api';
-
 import Blink from './blink/Blink';
 
 require('./Story.css');
+
 const shortid = require('shortid');
+
+const socket = io();
 
 class Story extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      messages: [
-        { text: 'This is text', id: shortid.generate() },
-        { text: 'Some text happened.', id: shortid.generate() },
-        { text: 'Some more very very very very very very very very very very very very long text.', id: shortid.generate() },
-        { text: 'Text again.', choices: true, id: shortid.generate() },
-      ],
+      messages: [],
       fault: false,
     };
 
@@ -28,22 +24,22 @@ class Story extends React.Component {
   }
 
   componentDidMount() {
+    // Let's manually start from controller
+    socket.emit('start');
+
     // Receive message from "control"
-    io.on('message', (msg) => {
-      let text;
-      let choices;
-      try {
-        const msg_obj = JSON.parse(msg);
-        text = msg_obj.text;
-        choices = msg_obj.choices;
-      } catch (e) {
-        text = msg;
+    socket.on('message', (data) => {
+      if (typeof data === 'string') {
+        this.addMessage(data);
+      } else {
+        const text = data.text || '';
+        const choices = data.choices || null;
+        this.addMessage(text, choices);
       }
-      this.addMessage(text, choices);
     });
 
     // Receive the fault from "control"
-    io.on('fault', msg => this.setState({ fault: true }));
+    socket.on('fault', isFault => this.setState({ fault: isFault }));
   }
 
   addMessage(text, choices) {
@@ -51,7 +47,6 @@ class Story extends React.Component {
     this.setState({
       messages: [...this.state.messages, { text, choices, id }],
     });
-    this.setState({ fault: true });
   }
 
   selectChoice(id, choice) {
@@ -59,8 +54,7 @@ class Story extends React.Component {
     messages[id].selected = choice;
     this.setState({ messages });
 
-    // Test
-    this.addMessage('More text', ['Choice 1', 'Choice 2']);
+    socket.emit(choice); // Reply to server
   }
   renderChoices(msg, id, last) {
     if (!last) {
@@ -88,7 +82,9 @@ class Story extends React.Component {
         <div className="story-msg-container">
           {this.state.messages.map((msg, i) => (
             <div key={msg.id} className="story-msg">
-              {msg.text}
+              <div className="story-msg-text">
+                {msg.text}
+              </div>
               {this.renderChoices(msg, i, i === this.state.messages.length - 1)}
             </div>
           ))}

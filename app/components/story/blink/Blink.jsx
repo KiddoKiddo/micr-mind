@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 require('./Blink.css');
 
 const Blink = ({ error }) => (
-  <div>
+  <div className="pulse-container">
     {error ?
     (<svg
       className="pulse error" x="0px" y="0px"
@@ -19,11 +19,11 @@ const Blink = ({ error }) => (
       className="pulse ok" x="0px" y="0px"
       width="400px" height="400px" viewBox="0 0 400 400"
     >
-      <filter id="blurMe">
+      <filter id="blur">
         <feGaussianBlur in="SourceGraphic" stdDeviation="3" />
       </filter>
-      <circle className="pulse-disk" cx="200" cy="200" filter="url(#blurMe)" />
-      <circle className="pulse-circle" cx="200" cy="200" filter="url(#blurMe)" />
+      <circle className="pulse-disk" cx="200" cy="200" />
+      <circle className="pulse-circle" cx="200" cy="200" filter="url(#blur)" />
     </svg>)
   }
   </div>
