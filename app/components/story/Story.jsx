@@ -16,6 +16,7 @@ class Story extends React.Component {
     this.state = {
       messages: [],
       fault: false,
+      sound: false,
     };
 
     this.addMessage = this.addMessage.bind(this);
@@ -39,7 +40,8 @@ class Story extends React.Component {
     });
 
     // Receive the fault from "control"
-    socket.on('fault', isFault => this.setState({ fault: isFault }));
+    socket.on('fault', fault => this.setState({ fault }));
+    socket.on('sound', sound => this.setState({ sound }));
   }
 
   addMessage(text, choices) {
@@ -77,20 +79,19 @@ class Story extends React.Component {
   }
 
   render() {
+    const msg = this.state.messages[this.state.messages.length - 1];
+    const index = this.state.messages.length - 1;
     return (
       <div className="story-container">
         <div className="story-msg-container">
-          {this.state.messages.map((msg, i) => (
-            <div key={msg.id} className="story-msg">
-              <div className="story-msg-text">
-                {msg.text}
-              </div>
-              {this.renderChoices(msg, i, i === this.state.messages.length - 1)}
-            </div>
-          ))}
+          { msg &&
+          <div key={msg.id} className="story-msg">
+            <div className="story-msg-text" dangerouslySetInnerHTML={{ __html: msg.text }} />
+            {this.renderChoices(msg, index, index === this.state.messages.length - 1)}
+          </div>}
         </div>
         <div className="story-blink-container">
-          <Blink error={this.state.fault} />
+          <Blink error={this.state.fault} sound={this.state.sound} />
         </div>
       </div>);
   }

@@ -9,7 +9,7 @@ const io = require('socket.io')(http);
 
 const twx = require('./utils/twx');
 const nc = require('./utils/nervecenter');
-const Mind = require('./Mind.js');
+const Flow = require('./Flow.js');
 
 // To serve the react app build
 app.use(express.static(`${__dirname}/../build`));
@@ -26,14 +26,14 @@ io.of('/mind')
     const logger = '[mind] ';
     console.log(`${logger} *** a client connected`);
 
-    // Init Mind for each socket client
-    const mind = Mind(socket);
+    // Init Flow for each socket client
+    const flow = Flow(socket);
 
     // Store clients
-    clients[socket.id] = mind;
+    clients[socket.id] = flow;
 
     // To start flow
-    socket.on('start', () => mind.fsm.reset());
+    socket.on('start', () => flow.fsm.reset());
   });
 
 // Socket io connection for manual control state machine
@@ -52,17 +52,17 @@ const control = io
     // // To start flow
     // socket.on('start', () => flow.reset()); // To 'idle'
     //
-    // // Transmit message to 'mind' client
-    // socket.on('send-to-mind', (data) => {
+    // // Transmit message to 'Flow' client
+    // socket.on('send-to-Flow', (data) => {
     //   try {
     //     const data_json = JSON.parse(data);
     //
-    //     // Emit to mind if data is JSON structured.
+    //     // Emit to Flow if data is JSON structured.
     //     const event = data_json.event || 'message';
     //     const data_to_be_sent = data_json.data || '';
-    //     mind.emit(event, data_to_be_sent);
+    //     Flow.emit(event, data_to_be_sent);
     //   } catch (e) {
-    //     mind.emit('message', data);
+    //     Flow.emit('message', data);
     //   }
     // });
 
@@ -73,5 +73,5 @@ const control = io
 // Start express server
 const port = process.env.PORT || 3000;
 http.listen(port, () => {
-  console.log('Listening on *:3000');
+  console.log('Listening on *:', port);
 });

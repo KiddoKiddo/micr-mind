@@ -2,11 +2,12 @@ require('dotenv').config();
 
 const StateMachine = require('javascript-state-machine');
 const utils = require('./utils/utils');
+const content = require('./content');
 
 // State machine to control flow
 // Documentation: https://github.com/jakesgordon/javascript-state-machine
 const loggerFsm = '[fsm] ';
-const Mind = (socket) => {
+const Flow = (socket) => {
   const fsm = new StateMachine({
     init: 'init',
     transitions: [
@@ -14,9 +15,9 @@ const Mind = (socket) => {
       // To step through the flow
       { name: 'step', from: 'idle', to: 'fault' },
       { name: 'step', from: 'fault', to: 'action' },
-      { name: 'step', from: 'action', to: 'maintainance-in-progress' },
-      { name: 'step', from: 'maintainance-in-progress', to: 'maintainance-done' },
-      { name: 'step', from: 'maintainance-done', to: 'idle' },
+      { name: 'step', from: 'action', to: 'maintenance-in-progress' },
+      { name: 'step', from: 'maintenance-in-progress', to: 'maintenance-done' },
+      { name: 'step', from: 'maintenance-done', to: 'idle' },
       // To reset anytime
       { name: 'reset', from: '*', to: 'idle' },
       { name: 'stop', from: '*', to: 'init' },
@@ -28,7 +29,7 @@ const Mind = (socket) => {
       onIdle: (lifecycle) => {
         // Reset
         socket.emit('fault', false);
-        socket.send({ text: 'The Production Line is running at the optimal level currently.' });
+        socket.send({ text: content.idle.text.join('<br>') });
 
         // Keep checking for fault
         if (process.env.TIMEOUT) setTimeout(() => lifecycle.fsm.step(), 5000);
@@ -36,8 +37,9 @@ const Mind = (socket) => {
       onFault: (lifecycle) => {
         // Fault
         socket.emit('fault', true);
+        // socket.emit('sound', true);
         socket.send({
-          text: 'Conveyor belt at Station #1 is not working! Do you want to solve the issue?',
+          text: content.fault.text.join(' '),
           choices: true, // OK and Cancel options
         });
 
@@ -45,22 +47,25 @@ const Mind = (socket) => {
         socket.once('OK', () => lifecycle.fsm.step()); // Go to 'action'
         socket.once('Cancel', () => lifecycle.fsm.reset()); // Back to 'idle'
       },
+      onLeaveFault: (lifecycle) => {
+        socket.emit('sound', false);
+      },
       onAction: (lifecycle) => {
         socket.send({
-          text: 'Creating a Maintenance Work Order for the issue.<br>Reschedule.<br>Contact personel via email.',
+          text: content.action.text.join('<br>'),
         });
         if (process.env.TIMEOUT) setTimeout(() => lifecycle.fsm.step(), 5000);
       },
-      onMaintainanceInProgress: (lifecycle) => {
+      onMaintenanceInProgress: (lifecycle) => {
         socket.send({
-          text: 'Maintenance of conveyor belt at #Station 1 is in progress (W.O ID xx)',
+          text: content.maintenanceInProgess.text.join('<br>'),
         });
         if (process.env.TIMEOUT) setTimeout(() => lifecycle.fsm.step(), 5000);
       },
-      onMaintainanceDone: (lifecycle) => {
+      onMaintenanceDone: (lifecycle) => {
         socket.emit('fault', false);
         socket.send({
-          text: 'Maintenance W.O ID xx is completed and the issue is solved.The production resumed back to normal. Due to the timely intervention, the on-time delivery schedule is not affected.',
+          text: content.maintenanceDone.text.join('<br>'),
         });
         if (process.env.TIMEOUT) setTimeout(() => lifecycle.fsm.step(), 5000);
       },
@@ -68,4 +73,4 @@ const Mind = (socket) => {
   });
   return { fsm };
 };
-module.exports = Mind;
+module.exports = Flow;

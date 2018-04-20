@@ -1,10 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+const Sound = require('react-sound').default;
+
 require('./Blink.css');
 
-const Blink = ({ error }) => (
+const Blink = ({ error, sound }) => (
   <div className="pulse-container">
+    {sound ? <Sound
+      url="/sound/shortsirene.mp3"
+      playStatus="PLAYING"
+      loop
+    /> : ''}
     {error ?
     (<svg
       className="pulse error" x="0px" y="0px"
@@ -31,6 +38,10 @@ const Blink = ({ error }) => (
 
 Blink.propTypes = {
   error: React.PropTypes.bool.isRequired,
+  sound: React.PropTypes.bool,
+};
+Blink.defaultProps = {
+  sound: false,
 };
 
 export default Blink;
