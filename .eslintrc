@@ -18,6 +18,7 @@
     "no-use-before-define": ["off"],
     "no-unused-vars": ["off"],
     "camelcase": ["off"],
-    "no-console": ["off"], 
+    "no-console": ["off"],
+    "no-plusplus": ["off"],
   }
 }

@@ -37,6 +37,7 @@ const Flow = (socket) => {
       onFault: (lifecycle) => {
         // Fault
         socket.emit('fault', true);
+        // TURN OFF THE SOUND HERE
         // socket.emit('sound', true);
         socket.send({
           text: content.fault.text.join(' '),
