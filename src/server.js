@@ -34,6 +34,9 @@ io.of('/mind')
 
     // To start flow
     socket.on('start', () => flow.fsm.reset());
+
+    // To update current status to 'control' client
+    setInterval(() => socket.emit('flowState', { state: flow.state }), 5000);
   });
 
 // Socket io connection for manual control state machine
@@ -65,9 +68,6 @@ const control = io
     //     Flow.emit('message', data);
     //   }
     // });
-
-    // To update current status to 'control' client
-    // setInterval(() => io.emit('status', { state: flow.state }), 3000);
   });
 
 // Start express server

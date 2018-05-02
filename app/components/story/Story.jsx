@@ -4,6 +4,7 @@ import io from '../../socket-api';
 import Blink from './blink/Blink';
 
 require('./Story.css');
+const classNames = require('classnames');
 
 const shortid = require('shortid');
 
@@ -14,9 +15,11 @@ class Story extends React.Component {
     super(props);
 
     this.state = {
-      messages: [],
+      message: {},
       fault: false,
       sound: false,
+      blinkPos: 'right',
+      flowState: 'init',
     };
 
     this.addMessage = this.addMessage.bind(this);
@@ -26,7 +29,7 @@ class Story extends React.Component {
 
   componentDidMount() {
     // Let's manually start from controller
-    socket.emit('start');
+    socket.emit('start'); // To 'idle'
 
     // Receive message from "control"
     socket.on('message', (data) => {
@@ -42,55 +45,63 @@ class Story extends React.Component {
     // Receive the fault from "control"
     socket.on('fault', fault => this.setState({ fault }));
     socket.on('sound', sound => this.setState({ sound }));
+    socket.on('state', flowState => this.stState({ flowState }));
   }
 
   addMessage(text, choices) {
     const id = shortid.generate();
     this.setState({
-      messages: [...this.state.messages, { text, choices, id }],
+      message: { text, choices, id },
     });
   }
 
-  selectChoice(id, choice) {
-    const messages = [...this.state.messages];
-    messages[id].selected = choice;
-    this.setState({ messages });
+  // Send choices to socket
+  selectChoice(choice) { socket.emit(choice); }
 
-    socket.emit(choice); // Reply to server
-  }
-  renderChoices(msg, id, last) {
-    if (!last) {
-      return msg.selected ? <span className="story-msg-selected">{msg.selected}</span> : '';
-    }
+  // Render choices (if any)
+  renderChoices(msg) {
+    // No choice
     if (!msg.choices) return '';
+    // Custom choices
     if (typeof msg.choices === 'object') {
       return (<div className="story-msg-choices">
         { msg.choices.map(choice =>
           <button
             key={choice}
-            onClick={() => { this.selectChoice(id, choice); }}
+            onClick={() => { this.selectChoice(choice); }}
           > {choice}</button>)}
       </div>);
     }
+    // Ok cancel choices
     return (<div className="story-msg-choices">
-      <button className="ok" onClick={() => { this.selectChoice(id, 'OK'); }}>OK</button>
-      <button className="cancel" onClick={() => { this.selectChoice(id, 'Cancel'); }}>Cancel</button>
+      <button className="ok" onClick={() => { this.selectChoice('OK'); }}>OK</button>
+      <button className="cancel" onClick={() => { this.selectChoice('Cancel'); }}>Cancel</button>
     </div>);
   }
 
   render() {
-    const msg = this.state.messages[this.state.messages.length - 1];
-    const index = this.state.messages.length - 1;
+    const msg = this.state.message;
+    const blinkClasses = classNames({
+      'story-blink-container': true,
+      'story-blink-container-left': this.state.blinkPos === 'left',
+      'story-blink-container-right': this.state.blinkPos === 'right',
+    });
     return (
       <div className="story-container">
         <div className="story-msg-container">
           { msg &&
           <div key={msg.id} className="story-msg">
-            <div className="story-msg-text" dangerouslySetInnerHTML={{ __html: msg.text }} />
-            {this.renderChoices(msg, index, index === this.state.messages.length - 1)}
-          </div>}
+            <div className="story-msg-text">
+              {msg.text && msg.text.map((item, key) =>
+                <span key={shortid.generate()}>{item}<br /></span>)}
+            </div>
+            {this.renderChoices(msg)}
+          </div> }
         </div>
-        <div className="story-blink-container">
+        <div className="story-menu-container">
+          <button onClick={() => socket.emit('open_app', { app: 'MIR_CONTROL', position: 5 })}>AGV Controller</button>
+        </div>
+        <div className={blinkClasses}>
           <Blink error={this.state.fault} sound={this.state.sound} />
         </div>
       </div>);

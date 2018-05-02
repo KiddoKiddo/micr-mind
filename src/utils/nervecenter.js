@@ -28,6 +28,17 @@ const nc = {
     .then(response => response.data)
     .catch(error => console.log(error)),
 
+  createApp: async (opts) => {
+    const options = Object.assign({
+      ar: '16x9',
+      label: 'Yahoo',
+      reduce: false,
+      url: 'http://www.yahoo.com',
+      zoom: 100,
+    }, opts);
+    return axios.post(`http://${host}/api/v2/apps`, options, { headers: defaultHeaders });
+  },
+
   placeApp: async (keyword, position) => {
     if (!keyword || !position) {
       console.log('[ERR] No keyword or position provided.');
@@ -63,6 +74,7 @@ const nc = {
         .then(response => response.data)
         .catch(error => console.log(error));
     }
+    console.log(`[nervecenter] Place app ${app.url} at ${position}`);
     return true;
   },
 };

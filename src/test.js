@@ -2,15 +2,12 @@
 
 const twx = require('./utils/twx');
 const nc = require('./utils/nervecenter');
+const mir = require('./utils/mir');
 
 const test = async () => {
-  let count = 0;
   const intervalObject = setInterval(async () => {
-    count++;
-    const result = await nc.placeApp('artc', count);
-    if (count === 12) {
-      count = 0;
-    }
-  }, 1000);
+    console.log('isInAction', await mir.isInAction());
+    console.log('isInStagingError', await mir.isInStagingError());
+  }, 5000);
 };
 test();

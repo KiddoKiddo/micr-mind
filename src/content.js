@@ -4,14 +4,20 @@ module.exports = {
   },
   idle: {
     text: [
-      'The Production Line is running at the optimal level currently.',
+      'Normal operation.',
+    ],
+  },
+  task: {
+    text: [
+      'AGV is in action...',
     ],
   },
   fault: {
     text: [
-      'Conveyor belt at station #1 is not working!',
-      'Do you want to take action?',
+      'AGV encounters a problem.',
+      'Do you want to tackle the issue?',
     ],
+    choices: true,
   },
   action: {
     text: [
@@ -22,7 +28,6 @@ module.exports = {
   },
   maintenanceInProgess: {
     text: [
-      'Conveyor bell is stopped',
       'Maintenance personnel is attending the issue',
       'Maintenance WO ID: XXXXXXX',
     ],
