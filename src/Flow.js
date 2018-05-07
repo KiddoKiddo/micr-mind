@@ -28,7 +28,7 @@ const Flow = (socket) => {
       { name: 'step', from: 'maintenance-done', to: 'idle' },
       // To reset anytime to either 'idle' 'init'
       { name: 'reset', from: '*', to: 'idle' },
-      { name: 'stop', from: '*', to: 'init' },
+      // { name: 'stop', from: '*', to: 'init' },
     ],
     methods: {
       onEnterState: (lifecycle) => {
