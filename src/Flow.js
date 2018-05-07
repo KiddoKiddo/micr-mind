@@ -11,6 +11,8 @@ const IS_TIMEOUT = process.env.TIMEOUT === 'true';
 const IS_SOUND = process.env.SOUND === 'true';
 const SCAN_RATE = process.env.SCAN_RATE || 1000;
 
+let isInit = false;
+
 // State machine to control flow
 // Documentation: https://github.com/jakesgordon/javascript-state-machine
 const loggerFsm = '[fsm] ';
@@ -18,7 +20,6 @@ const Flow = (socket) => {
   const fsm = new StateMachine({
     init: 'init',
     transitions: [
-      { name: 'start', from: 'init', to: 'idle' },
       // To step through the flow
       { name: 'step', from: 'idle', to: 'task' },
       { name: 'step', from: 'task', to: 'fault' },
@@ -35,20 +36,26 @@ const Flow = (socket) => {
         console.log(`${loggerFsm} --- STATE: ${lifecycle.to}`);
       },
       onInit: (lifecycle) => {
-        // Log all important env
-        console.log(`IS_PRODUCTION: ${IS_PRODUCTION}`);
-        console.log(`IS_TIMEOUT: ${IS_TIMEOUT}`);
-        console.log(`IS_SOUND: ${IS_SOUND}`);
+        // TODO: Why onInit enter two times
+        if (!isInit) {
+          // Log all important env
+          console.log(`IS_PRODUCTION: ${IS_PRODUCTION}`);
+          console.log(`IS_TIMEOUT: ${IS_TIMEOUT}`);
+          console.log(`IS_SOUND: ${IS_SOUND}`);
 
-        // Some common even to handle through out the app
-        socket.on('open_app', (msg) => {
-          const url = msg.label || 'www.google.com';
-          const pos = msg.position || 1;
+          // Some common even to handle through out the app
+          socket.on('open_app', (msg) => {
+            const url = msg.label || 'www.google.com';
+            const pos = msg.position || 1;
 
-          if (IS_PRODUCTION) nc.placeApp(url, pos);
-        });
+            if (IS_PRODUCTION) nc.placeApp(url, pos);
+          });
+
+          isInit = true;
+        }
       },
       onIdle: (lifecycle) => {
+        console.log('onIdle');
         socket.send(content.idle);
 
         // Reset fault
@@ -56,7 +63,7 @@ const Flow = (socket) => {
 
         // Check whether AGV in action
         const interval = setInterval(async () => {
-          if (!IS_PRODUCTION || await mir.isInAction()) {
+          if (!IS_PRODUCTION || IS_TIMEOUT || await mir.isInAction()) {
             lifecycle.fsm.step();
             clearInterval(interval);
           }
