@@ -51,10 +51,14 @@ const nc = {
     const app = apps.find(item =>
       (item.label && item.label.includes(keyword)) || item.url.includes(keyword));
 
-    if (!app) return false;
+    if (!app) {
+      console.log(`[nervecenter] No app with the label or url contains ${keyword}`);
+      return false;
+    }
 
     let windshieldId;
     if (app.windshieldIds.length === 0) {
+      console.log(`[nervecenter] URL: ${app.url}`);
       windshieldId = await axios.post(`http://${host}/api/v2/items`,
         {
           uuid: `${app.uuid}.x.0.y.0`,
@@ -65,6 +69,7 @@ const nc = {
         .then(response => response.data)
         .catch(error => console.log(error));
     } else {
+      console.log(`[nervecenter] URL: ${app.url}`);
       windshieldId = app.windshieldIds[0].id; // Assume only one screen
       axios.patch(`http://${host}/api/v2/item/${windshieldId}`,
         {
@@ -76,7 +81,7 @@ const nc = {
         .then(response => response.data)
         .catch(error => console.log(error));
     }
-    console.log(`[nervecenter] URL: ${app.url}`);
+
     return true;
   },
 };
