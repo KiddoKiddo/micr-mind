@@ -102,11 +102,8 @@ class Story extends React.Component {
           <button onClick={() => socket.emit('open_app', { label: 'AGV Controller', position: 5 })}>
             AGV Controller
           </button>
-          <button onClick={() => socket.emit('open_app', { label: 'QUUPPA', position: 5 })}>
+          <button onClick={() => socket.emit('open_app', { label: 'QUUPPA', position: 6 })}>
             Quuppa
-          </button>
-          <button onClick={() => socket.emit('open_app', { label: 'CAM', position: 5 })}>
-            IP CAM
           </button>
         </div>
         <div className={blinkClasses}>
