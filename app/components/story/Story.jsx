@@ -99,7 +99,15 @@ class Story extends React.Component {
           </div> }
         </div>
         <div className="story-menu-container">
-          <button onClick={() => socket.emit('open_app', { app: 'MIR_CONTROL', position: 5 })}>AGV Controller</button>
+          <button onClick={() => socket.emit('open_app', { label: 'MIR', position: 5 })}>
+            AGV Controller
+          </button>
+          <button onClick={() => socket.emit('open_app', { label: 'QUUPPA', position: 5 })}>
+            Quuppa
+          </button>
+          <button onClick={() => socket.emit('open_app', { label: 'CAM', position: 5 })}>
+            IP CAM
+          </button>
         </div>
         <div className={blinkClasses}>
           <Blink error={this.state.fault} sound={this.state.sound} />

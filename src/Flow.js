@@ -61,7 +61,7 @@ const Flow = (socket) => {
         socket.send(content.task);
 
         // Show AGV map (Quuppa)
-        if (IS_PRODUCTION) nc.placeApp('QUUPPA', 7);
+        if (IS_PRODUCTION) nc.placeApp(process.env.QUUPPA_APP, 7);
 
         // Check whether AGV in error
         const interval = setInterval(async () => {
@@ -79,8 +79,6 @@ const Flow = (socket) => {
 
         // Alarm
         if (IS_SOUND) socket.emit('sound', true);
-
-        // TODO: Show IP camera of AGV
 
         // Show Quuppa
         if (IS_PRODUCTION) nc.placeApp('QUUPPA', 7);
