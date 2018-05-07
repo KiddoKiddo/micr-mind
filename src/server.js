@@ -33,7 +33,7 @@ io.of('/mind')
     clients[socket.id] = flow;
 
     // To start flow
-    socket.on('start', () => flow.fsm.reset());
+    // socket.on('start', () => flow.fsm.reset());
 
     // To update current status to 'control' client
     setInterval(() => socket.emit('flowState', { state: flow.state }), 5000);

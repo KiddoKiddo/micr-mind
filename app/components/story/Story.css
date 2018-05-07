@@ -12,8 +12,10 @@
   cursor: pointer;
   transition-duration: 0.5s;
 }
-.story-container button:hover,
-.story-container button:focus{
+.story-container button:focus {
+  outline:0;
+}
+.story-container button:hover {
   transform: scale(1.1);
   outline:0;
 }
