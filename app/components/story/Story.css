@@ -38,7 +38,7 @@
   grid-template-columns: 50% 50%;
   grid-template-rows: 25% 25% 25% auto;
   grid-gap: 30px 30px;
-  padding: 0px 50px;
+  margin: 50px 50px;
 
 }
 .story-menu-container button {

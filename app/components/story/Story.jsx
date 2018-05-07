@@ -99,7 +99,7 @@ class Story extends React.Component {
           </div> }
         </div>
         <div className="story-menu-container">
-          <button onClick={() => socket.emit('open_app', { label: 'MIR', position: 5 })}>
+          <button onClick={() => socket.emit('open_app', { label: 'AGV Controller', position: 5 })}>
             AGV Controller
           </button>
           <button onClick={() => socket.emit('open_app', { label: 'QUUPPA', position: 5 })}>
