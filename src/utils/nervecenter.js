@@ -45,7 +45,7 @@ const nc = {
       return false;
     }
 
-    console.log(`[nervecenter] Place app with label${keyword} at ${position}`);
+    console.log(`[nervecenter] Place app with label ${keyword} at ${position}`);
 
     const apps = await module.exports.getApps();
     const app = apps.find(item =>

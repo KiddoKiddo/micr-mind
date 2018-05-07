@@ -42,7 +42,7 @@ const Flow = (socket) => {
 
         // Some common even to handle through out the app
         socket.on('open_app', (msg) => {
-          const url = process.env[msg.app] || 'www.google.com';
+          const url = process.env[msg.label] || 'www.google.com';
           const pos = msg.position || 1;
 
           if (IS_PRODUCTION) nc.placeApp(url, pos);
