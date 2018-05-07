@@ -35,6 +35,11 @@ const Flow = (socket) => {
         console.log(`${loggerFsm} --- STATE: ${lifecycle.to}`);
       },
       onInit: (lifecycle) => {
+        // Log all important env
+        console.log(`IS_PRODUCTION: ${IS_PRODUCTION}`);
+        console.log(`IS_TIMEOUT: ${IS_TIMEOUT}`);
+        console.log(`IS_SOUND: ${IS_SOUND}`);
+
         // Some common even to handle through out the app
         socket.on('open_app', (msg) => {
           const url = process.env[msg.app] || 'www.google.com';

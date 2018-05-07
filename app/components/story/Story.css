@@ -9,8 +9,8 @@
   grid-template-rows: 540px 540px;
 }
 .story-container button {
-    cursor: pointer;
-    transition-duration: 0.5s;
+  cursor: pointer;
+  transition-duration: 0.5s;
 }
 .story-container button:hover,
 .story-container button:focus{
@@ -38,7 +38,7 @@
   grid-template-columns: 50% 50%;
   grid-template-rows: 25% 25% 25% auto;
   grid-gap: 30px 30px;
-  margin: 50px 50px;
+  margin: 30px;
 
 }
 .story-menu-container button {
@@ -59,7 +59,7 @@
   font-size: 70px;
   line-height: 1.4;
 
-  margin: 50px 50px;
+  margin: 30px;
   padding: 50px 60px;
 
   background: #3D3C4D;
