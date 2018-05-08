@@ -61,7 +61,7 @@ class Flow {
           socket.send(content.task);
 
           // Show AGV map (Quuppa)
-          if (IS_PRODUCTION) nc.placeApp(process.env.QUUPPA_APP, 7);
+          if (IS_PRODUCTION) nc.placeApp('QUUPPA', 7);
 
           // Check whether AGV in error
           const interval = setInterval(async () => {
