@@ -102,7 +102,7 @@ class Story extends React.Component {
           <button onClick={() => socket.emit('open_app', { label: 'AGV Controller', position: 5 })}>
             AGV Controller
           </button>
-          <button onClick={() => socket.emit('open_app', { label: 'QUUPPA', position: 6 })}>
+          <button onClick={() => socket.emit('open_app', { label: 'QUUPPA', position: 7 })}>
             Quuppa
           </button>
           <button onClick={() => socket.emit('open_app', { label: 'MIR', position: 6 })}>
