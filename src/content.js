@@ -21,7 +21,7 @@ module.exports = {
   },
   action: {
     text: [
-      'Create maintenance WO',
+      'Create maintenance WO. WO ID: XXXXXXX',
       'Reschedule production WO to delivery on time',
       'Contact the maintenance personnel via email.',
     ],
@@ -29,14 +29,12 @@ module.exports = {
   maintenanceInProgess: {
     text: [
       'Maintenance personnel is attending the issue',
-      'Maintenance WO ID: XXXXXXX',
     ],
   },
   maintenanceDone: {
     text: [
       'Maintenance W.O ID: XXXXXXX is completed and the issue is solved.',
       'The production resumed back to normal.',
-      'The on-time delivery schedule is not affected.',
     ],
   },
 };

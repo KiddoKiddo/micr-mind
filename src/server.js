@@ -11,6 +11,11 @@ const twx = require('./utils/twx');
 const nc = require('./utils/nervecenter');
 const Flow = require('./Flow.js');
 
+const IS_PRODUCTION = process.env.ENV === 'PRODUCTION';
+const IS_TIMEOUT = process.env.TIMEOUT === 'true';
+const IS_SOUND = process.env.SOUND === 'true';
+const SCAN_RATE = process.env.SCAN_RATE || 1000;
+
 // To serve the react app build
 app.use(express.static(`${__dirname}/../build`));
 app.get('*', (request, response) => {
@@ -27,13 +32,21 @@ io.of('/mind')
     console.log(`${logger} *** a client connected`);
 
     // Init Flow for each socket client
-    const flow = Flow(socket);
+    const flow = new Flow(socket);
 
     // Store clients
     clients[socket.id] = flow;
 
     // To start flow
     socket.on('start', () => flow.fsm.reset());
+
+    // Some common even to handle through out the app
+    socket.on('open_app', (msg) => {
+      console.log(msg);
+      const url = msg.label || 'www.google.com';
+      const pos = msg.position || 1;
+      if (IS_PRODUCTION) nc.placeApp(url, pos);
+    });
 
     // To update current status to 'control' client
     setInterval(() => socket.emit('flowState', { state: flow.state }), 5000);
