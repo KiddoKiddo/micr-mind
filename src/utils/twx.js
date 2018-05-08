@@ -9,21 +9,32 @@ const defaultHeaders = {
 
 // TODO: Proper error logging
 const twx = {
+  //
+  executeService: (thing, service) => axios({
+    method: 'post',
+    url: `${url}/${thing}/Services/${service}`,
+    headers: defaultHeaders,
+  })
+  .then(response => response.data.rows[0].result)
+  .catch(error => console.log(error.response)),
+
+  //
   getThing: thing => axios({
     method: 'post',
     url: `${url}/MSChatBot_API/${thing}/`,
     headers: defaultHeaders,
   })
   .then(response => response.data.rows[0].result)
-  .catch(error => console.log(error.response.data)),
+  .catch(error => console.log(error.response)),
 
+  //
   isLineRunning: () => axios({
     method: 'post',
     url: `${url}/MSChatBot_API/Services/IsLineRunning`,
     headers: defaultHeaders,
   })
   .then(response => response.data.rows[0].result)
-  .catch(error => console.log(error.response.data)),
+  .catch(error => console.log(error.response)),
 };
 
 module.exports = twx;

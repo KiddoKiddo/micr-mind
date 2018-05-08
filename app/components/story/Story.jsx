@@ -108,6 +108,9 @@ class Story extends React.Component {
           <button onClick={() => socket.emit('open_app', { label: 'MIR', position: 6 })}>
             MIR
           </button>
+          <button onClick={() => location.reload()}>
+            RESTART
+          </button>
         </div>
         <div className={blinkClasses}>
           <Blink error={this.state.fault} sound={this.state.sound} />
