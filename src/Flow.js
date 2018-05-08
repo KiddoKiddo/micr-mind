@@ -16,7 +16,6 @@ const SCAN_RATE = process.env.SCAN_RATE || 1000;
 const loggerFsm = '[fsm] ';
 class Flow {
   constructor(socket) {
-
     // Log all important env
     console.log(`IS_PRODUCTION: ${IS_PRODUCTION}`);
     console.log(`IS_TIMEOUT: ${IS_TIMEOUT}`);
@@ -66,7 +65,7 @@ class Flow {
 
           // Check whether AGV in error
           const interval = setInterval(async () => {
-            if (!IS_PRODUCTION || await mir.isInStagingError()) {
+            if (!IS_PRODUCTION || IS_TIMEOUT || await mir.isInStagingError()) {
               lifecycle.fsm.step();
               clearInterval(interval);
             }
