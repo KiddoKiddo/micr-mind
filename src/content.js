@@ -21,6 +21,7 @@ module.exports = {
   },
   action: {
     text: [
+      'Create maintenance WO: ',
       'Reschedule production WO to delivery on time',
       'Contact the maintenance personnel via email.',
     ],
@@ -32,6 +33,7 @@ module.exports = {
   },
   maintenanceDone: {
     text: [
+      'Maintenance W.O ID: is completed.',
       'The production resumed back to normal.',
     ],
   },
