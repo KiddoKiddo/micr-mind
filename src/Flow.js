@@ -3,6 +3,7 @@ require('dotenv').config();
 const StateMachine = require('javascript-state-machine');
 const nc = require('./utils/nervecenter');
 const mir = require('./utils/mir');
+const twx = require('./utils/twx');
 const utils = require('./utils/utils');
 const content = require('./content');
 
@@ -51,7 +52,7 @@ class Flow {
 
           // Check whether AGV in action
           const interval = setInterval(async () => {
-            if (!IS_PRODUCTION || IS_TIMEOUT || await mir.isInAction()) {
+            if (IS_TIMEOUT || await mir.isInAction()) {
               lifecycle.fsm.step();
               clearInterval(interval);
             }
@@ -65,13 +66,14 @@ class Flow {
 
           // Check whether AGV in error
           const interval = setInterval(async () => {
-            if (!IS_PRODUCTION || IS_TIMEOUT || await mir.isInStagingError()) {
+            if (IS_TIMEOUT || await mir.isInStagingError()) {
               lifecycle.fsm.step();
               clearInterval(interval);
             }
           }, SCAN_RATE);
         },
         onFault: (lifecycle) => {
+          // Text to UI
           socket.send(content.fault);
 
           // Fault
@@ -79,9 +81,6 @@ class Flow {
 
           // Alarm
           if (IS_SOUND) socket.emit('sound', true);
-
-          // Show Quuppa
-          if (IS_PRODUCTION) nc.placeApp('QUUPPA', 7);
 
           // Wait for response
           socket.once('OK', () => lifecycle.fsm.step()); // Go to 'action'
@@ -91,25 +90,46 @@ class Flow {
         onLeaveFault: (lifecycle) => {
           socket.emit('sound', false);
         },
-        onAction: (lifecycle) => {
+        onAction: async (lifecycle) => {
+          // Create WO TWX
+          const WOName = await twx.executeService('AGV_Arcstone_Demo', 'CreateWO');
+          console.log(`${loggerFsm} Create WO: ${WOName}`);
+
+          // Send content to UI
+          content.action.text.unshift(`Create maintenance WO: ${WOName}`);
           socket.send(content.action);
 
-          // TODO: How to know when the maintenance is in progress
-          if (IS_TIMEOUT) setTimeout(() => lifecycle.fsm.step(), SCAN_RATE);
+          // When the maintenance is in progress
+          const interval = setInterval(async () => {
+            // if (IS_TIMEOUT || await twx.getProperty('AGV_Arcstone_Demo', 'StartWO')) {
+            if (await twx.getProperty('AGV_Arcstone_Demo', 'StartWO')) {
+              lifecycle.fsm.step();
+              clearInterval(interval);
+            }
+          }, SCAN_RATE);
         },
-        onMaintenanceInProgress: (lifecycle) => {
-          // TODO: WO ID from TWX
+        onMaintenanceInProgress: async (lifecycle) => {
+          // Text to UI
           socket.send(content.maintenanceInProgess);
 
-          // TODO: Maintenance done check
-          if (IS_TIMEOUT) setTimeout(() => lifecycle.fsm.step(), SCAN_RATE);
+          // When the maintenance is done
+          const interval = setInterval(async () => {
+            // if (IS_TIMEOUT || await twx.getProperty('AGV_Arcstone_Demo', 'FinishWO')) {
+            if (await twx.getProperty('AGV_Arcstone_Demo', 'FinishWO')) {
+              lifecycle.fsm.step();
+              clearInterval(interval);
+            }
+          }, SCAN_RATE);
         },
-        onMaintenanceDone: (lifecycle) => {
+        onMaintenanceDone: async (lifecycle) => {
+          const WOName = await twx.getProperty('AGV_Arcstone_Demo', 'CreateWOName');
+          content.maintenanceDone.text.unshift(`Maintenance W.O ID: ${WOName} is completed.`);
           socket.send(content.maintenanceDone);
           // Reset blink
           socket.emit('fault', false);
 
-          if (IS_TIMEOUT) setTimeout(() => lifecycle.fsm.step(), SCAN_RATE);
+          // Always
+          setTimeout(() => lifecycle.fsm.step(), 10000);
         },
       },
     });

@@ -14,14 +14,13 @@ module.exports = {
   },
   fault: {
     text: [
-      'AGV encounters a problem.',
+      'AGV encountered a problem.',
       'Do you want to tackle the issue?',
     ],
     choices: true,
   },
   action: {
     text: [
-      'Create maintenance WO. WO ID: XXXXXXX',
       'Reschedule production WO to delivery on time',
       'Contact the maintenance personnel via email.',
     ],
@@ -33,7 +32,6 @@ module.exports = {
   },
   maintenanceDone: {
     text: [
-      'Maintenance W.O ID: XXXXXXX is completed and the issue is solved.',
       'The production resumed back to normal.',
     ],
   },

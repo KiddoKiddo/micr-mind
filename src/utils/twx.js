@@ -19,13 +19,18 @@ const twx = {
   .catch(error => console.log(error.response)),
 
   //
-  getThing: thing => axios({
-    method: 'post',
-    url: `${url}/MSChatBot_API/${thing}/`,
+  getProperties: thing => axios({
+    method: 'get',
+    url: `${url}/${thing}/Properties`,
     headers: defaultHeaders,
   })
-  .then(response => response.data.rows[0].result)
+  .then(response => response.data.rows[0])
   .catch(error => console.log(error.response)),
+
+  getProperty: async (thing, prop) => {
+    const result = await module.exports.getProperties(thing);
+    return result[prop];
+  },
 
   //
   isLineRunning: () => axios({

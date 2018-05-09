@@ -26,7 +26,7 @@ const nc = {
   getApps: () => axios.get(`http://${host}/api/v2/apps`,
     { headers: defaultHeaders })
     .then(response => response.data)
-    .catch(error => console.log(error)),
+    .catch(error => console.log(`${error.response.status} - ${error.response.statusText}`)),
 
   createApp: async (opts) => {
     const options = Object.assign({
@@ -36,7 +36,8 @@ const nc = {
       url: 'http://www.yahoo.com',
       zoom: 100,
     }, opts);
-    return axios.post(`http://${host}/api/v2/apps`, options, { headers: defaultHeaders });
+    return axios.post(`http://${host}/api/v2/apps`, options, { headers: defaultHeaders })
+    .catch(error => console.log(`${error.response.status} - ${error.response.statusText}`));
   },
 
   placeApp: async (keyword, position) => {
@@ -67,7 +68,7 @@ const nc = {
           box: boxes[position],
         }, { headers: defaultHeaders })
         .then(response => response.data)
-        .catch(error => console.log(error));
+        .catch(error => console.log(`${error.response.status} - ${error.response.statusText}`));
     } else {
       console.log(`[nervecenter] URL: ${app.url}`);
       windshieldId = app.windshieldIds[0].id; // Assume only one screen
@@ -79,7 +80,7 @@ const nc = {
         },
         { headers: defaultHeaders })
         .then(response => response.data)
-        .catch(error => console.log(error));
+        .catch(error => console.log(`${error.response.status} - ${error.response.statusText}`));
     }
 
     return true;
