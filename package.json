@@ -3,13 +3,14 @@
   "version": "0.0.1",
   "description": "",
   "scripts": {
-    "start": "webpack --config webpack.config.prod.js && node ./src/server.js",
+    "start": "node ./src/server.js",
     "start:ui": "webpack-dev-server --inline --content-base build/",
     "start:server": "nodemon ./src/server.js",
     "test": "./node_modules/.bin/mocha tests/**/*.spec.js --require babel-register",
     "test:watch": "./node_modules/.bin/mocha tests/**/*.spec.js --require babel-register --watch",
     "test:coverage": "nyc npm test",
-    "build": "webpack --config webpack.config.prod.js"
+    "build": "webpack --config webpack.config.prod.js",
+    "bs": "webpack --config webpack.config.prod.js && node ./src/server.js",
   },
   "nyc": {
     "reporter": [
