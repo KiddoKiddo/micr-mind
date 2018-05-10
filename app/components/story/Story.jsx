@@ -109,7 +109,10 @@ class Story extends React.Component {
             MIR
           </button>
           <button onClick={() => location.reload()}>
-            RESTART
+            DEMO
+          </button>
+          <button onClick={() => socket.emit('open_app', { label: 'PlantSim', position: 8 })}>
+            Plant Sim
           </button>
         </div>
         <div className={blinkClasses}>

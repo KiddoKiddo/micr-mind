@@ -94,6 +94,7 @@
 }
 .story-msg-choices button.ok {
   background-color: #098434;
+  font-size: 50px;
 }
 .story-msg-choices button.cancel {
   background-color: #bd4a36;
