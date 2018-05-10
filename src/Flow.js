@@ -42,7 +42,7 @@ class Flow {
         },
         onInit: (lifecycle) => {
           // TODO: Why onInit enter two times
-
+          socket.send('Initialize...');
         },
         onIdle: (lifecycle) => {
           socket.send(content.idle);

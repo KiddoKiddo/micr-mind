@@ -29,7 +29,7 @@ class Story extends React.Component {
 
   componentDidMount() {
     // Let's manually start from controller
-    socket.emit('start'); // To 'idle'
+    // socket.emit('start'); // To 'idle'
 
     // Receive message from "control"
     socket.on('message', (data) => {
@@ -108,7 +108,7 @@ class Story extends React.Component {
           <button onClick={() => socket.emit('open_app', { label: 'MIR', position: 6 })}>
             MIR
           </button>
-          <button onClick={() => location.reload()}>
+          <button onClick={() => { socket.emit('start'); location.reload(); }} >
             DEMO
           </button>
           <button onClick={() => socket.emit('open_app', { label: 'PlantSim', position: 8 })}>
