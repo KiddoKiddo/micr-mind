@@ -23,7 +23,7 @@ class Flow {
     console.log(`IS_SOUND: ${IS_SOUND}`);
 
     this.fsm = new StateMachine({
-      // init: 'init',
+      init: 'init',
       transitions: [
         // To step through the flow
         { name: 'step', from: 'idle', to: 'task' },
