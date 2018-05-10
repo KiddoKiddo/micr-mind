@@ -5,13 +5,20 @@ const nc = require('../utils/nervecenter');
 const mir = require('../utils/mir');
 
 const test = async () => {
-  // const intervalObject = setInterval(async () => {
-  //   console.log('isInAction', await mir.isInAction());
-  //   // console.log('isInStagingError', await mir.isInStagingError());
-  //
-  //   // console.log(await twx.executeService('MSChatBot_API', 'IsLineRunning'));
-  // }, 5000);
-  // console.log(await twx.executeService('AGV_Arcstone_Demo', 'CreateWO'));
-  console.log(await twx.getxProperty('AGV_Arcstone_Demo', 'CreateWOName'));
+  const intervalObject = setInterval(async () => {
+    const isInAction = await mir.isInAction();
+    const isInDemoError = await mir.isInDemoError();
+
+    console.log('isInAction', isInAction);
+    console.log('isInDemoError', isInDemoError);
+    if (isInDemoError) {
+      console.log('Going to delete Error_Demo');
+      setTimeout(() => {
+        mir.deleteLatestExecuting();
+
+        clearInterval(intervalObject);
+      }, 10000);
+    }
+  }, 5000);
 };
 test();

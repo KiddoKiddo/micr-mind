@@ -66,7 +66,7 @@ class Flow {
 
           // Check whether AGV in error
           const interval = setInterval(async () => {
-            if (IS_TIMEOUT || await mir.isInStagingError()) {
+            if (IS_TIMEOUT || await mir.isInDemoError()) {
               lifecycle.fsm.step();
               clearInterval(interval);
             }
@@ -101,8 +101,7 @@ class Flow {
 
           // When the maintenance is in progress
           const interval = setInterval(async () => {
-            // if (IS_TIMEOUT || await twx.getProperty('AGV_Arcstone_Demo', 'StartWO')) {
-            if (await twx.getProperty('AGV_Arcstone_Demo', 'StartWO')) {
+            if (IS_TIMEOUT || await twx.getProperty('AGV_Arcstone_Demo', 'StartWO')) {
               lifecycle.fsm.step();
               clearInterval(interval);
             }
@@ -114,17 +113,20 @@ class Flow {
 
           // When the maintenance is done
           const interval = setInterval(async () => {
-            // if (IS_TIMEOUT || await twx.getProperty('AGV_Arcstone_Demo', 'FinishWO')) {
-            if (await twx.getProperty('AGV_Arcstone_Demo', 'FinishWO')) {
+            if (IS_TIMEOUT || await twx.getProperty('AGV_Arcstone_Demo', 'FinishWO')) {
               lifecycle.fsm.step();
               clearInterval(interval);
             }
           }, SCAN_RATE);
         },
         onMaintenanceDone: async (lifecycle) => {
+          // Delete the error demo
+          await mir.deleteLatestExecuting();
+
           const WOName = await twx.getProperty('AGV_Arcstone_Demo', 'CreateWOName');
           content.maintenanceDone.text.splice(0, 1, `Maintenance W.O ID: ${WOName} is completed.`);
           socket.send(content.maintenanceDone);
+
           // Reset blink
           socket.emit('fault', false);
 
