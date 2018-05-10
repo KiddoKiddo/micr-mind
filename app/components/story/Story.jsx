@@ -90,7 +90,7 @@ class Story extends React.Component {
       <div className="story-container">
         <div className="story-msg-container">
           { msg &&
-          <div key={msg.id} className="story-msg" onClick={() => socket.emit('start')}>
+          <div key={msg.id} className="story-msg">
             <div className="story-msg-text">
               {msg.text && msg.text.map((item, key) =>
                 <span key={shortid.generate()}>{item}<br /></span>)}
@@ -108,14 +108,14 @@ class Story extends React.Component {
           <button onClick={() => socket.emit('open_app', { label: 'MIR', position: 6 })}>
             MIR
           </button>
-          <button onClick={() => { location.reload(); }} >
+          <button onClick={() => location.reload()} >
             DEMO
           </button>
           <button onClick={() => socket.emit('open_app', { label: 'PlantSim', position: 8 })}>
             Plant Sim
           </button>
         </div>
-        <div className={blinkClasses}>
+        <div className={blinkClasses} onClick={() => socket.emit('start')}>
           <Blink error={this.state.fault} sound={this.state.sound} />
         </div>
       </div>);
