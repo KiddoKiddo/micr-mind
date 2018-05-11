@@ -100,19 +100,19 @@ class Story extends React.Component {
         </div>
         <div className="story-menu-container">
           <button onClick={() => socket.emit('open_app', { label: 'AGV Controller', position: 5 })}>
-            AGV Controller
+            Control Panel
           </button>
           <button onClick={() => socket.emit('open_app', { label: 'QUUPPA', position: 7 })}>
-            Quuppa
+            Traceability
           </button>
           <button onClick={() => socket.emit('open_app', { label: 'MIR', position: 6 })}>
-            MIR
+            Smart Systemn
           </button>
           <button onClick={() => location.reload()} >
-            DEMO
+            Intelligence
           </button>
           <button onClick={() => socket.emit('open_app', { label: 'PlantSim', position: 8 })}>
-            Plant Sim
+            Simulation
           </button>
         </div>
         <div className={blinkClasses} onClick={() => socket.emit('start')}>
