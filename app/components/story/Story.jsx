@@ -106,7 +106,7 @@ class Story extends React.Component {
             Traceability
           </button>
           <button onClick={() => socket.emit('open_app', { label: 'MIR', position: 6 })}>
-            Smart Systemn
+            Smart System
           </button>
           <button onClick={() => location.reload()} >
             Intelligence
