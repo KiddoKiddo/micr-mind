@@ -24,7 +24,7 @@ const mir = {
     const latest = mission_queues.find(m => m.state === 'Executing');
     if (!latest) return false;
     const mq = await module.exports.getMissionQueueDetails(latest.id);
-    return mq.mission_id === (process.env.MIR_ERROR_DEMO || '4e11b245-4c43-11e8-97b9-f44d306f3f85');
+    return mq.mission_id === (process.env.MIR_ERROR_DEMO || '590f1604-5504-11e8-8d66-f44d306f3f85');
   },
 
   deleteLatestExecuting: async () => {
