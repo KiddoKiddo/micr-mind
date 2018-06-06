@@ -1,6 +1,6 @@
 module.exports = {
   init: {
-    text: [],
+    text: ['Initialize...'],
   },
   idle: {
     text: [

@@ -5,8 +5,8 @@
 
   /* Grid */
   display: grid;
-  grid-template-columns: 960px 960px 960px 960px 960px auto;
-  grid-template-rows: 540px 540px;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(2, 1fr);
 }
 .story-container button {
   border: 0;
@@ -36,13 +36,13 @@
   grid-column: 5 / span 1;
   grid-row: 2 / span 1;
   position: relative;
-
-  display: grid;
-  grid-template-columns: 50% 50%;
-  grid-template-rows: 25% 25% 25% auto;
-  grid-gap: 30px 30px;
   margin: 30px;
 
+  /* Grid */
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  grid-gap: 30px 30px;
 }
 .story-menu-container button {
   font-family: Verdana, sans-serif;

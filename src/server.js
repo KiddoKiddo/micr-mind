@@ -22,6 +22,7 @@ app.get('*', (request, response) => {
   response.sendFile(path.resolve(__dirname, '../build/index.html'));
 });
 
+// To store the clients
 const clients = {};
 
 // To init the socket io connection

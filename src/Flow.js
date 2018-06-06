@@ -40,15 +40,16 @@ class Flow {
         onEnterState: (lifecycle) => {
           console.log(`${loggerFsm} --- STATE: ${lifecycle.to}`);
         },
+        // ==========================Init================================
         onInit: (lifecycle) => {
           // TODO: Why onInit enter two times
-          socket.send({ text: ['Initialize...'] });
-        },
-        onIdle: (lifecycle) => {
-          socket.send(content.idle);
-
+          socket.send(content.init);
           // Reset fault
           socket.emit('fault', false);
+        },
+        // ==========================Idle================================
+        onIdle: (lifecycle) => {
+          socket.send(content.idle);
 
           // Check whether AGV in action
           const interval = setInterval(async () => {
@@ -58,6 +59,7 @@ class Flow {
             }
           }, SCAN_RATE);
         },
+        // ==========================Task================================
         onTask: (lifecycle) => {
           socket.send(content.task);
 
@@ -72,6 +74,7 @@ class Flow {
             }
           }, SCAN_RATE);
         },
+        // ==========================Fault================================
         onFault: (lifecycle) => {
           // Text to UI
           socket.send(content.fault);
@@ -88,11 +91,15 @@ class Flow {
         },
         // Turn off sound
         onLeaveFault: (lifecycle) => {
-          socket.emit('sound', false);
+          socket.emit('sound', false); // Turn off the sound
         },
+        // ==========================Action================================
         onAction: async (lifecycle) => {
           // Create WO TWX
-          const WOName = await twx.executeService('AGV_Arcstone_Demo', 'CreateWO');
+          let WOName = 'WO-XXX-XXX';
+          if (IS_PRODUCTION) {
+            WOName = await twx.executeService('AGV_Arcstone_Demo', 'CreateWO');
+          }
           console.log(`${loggerFsm} Create WO: ${WOName}`);
 
           // Send content to UI
@@ -107,6 +114,7 @@ class Flow {
             }
           }, SCAN_RATE);
         },
+        // ==========================MIP================================
         onMaintenanceInProgress: async (lifecycle) => {
           // Text to UI
           socket.send(content.maintenanceInProgess);
@@ -119,11 +127,16 @@ class Flow {
             }
           }, SCAN_RATE);
         },
+        // ==========================MD================================
         onMaintenanceDone: async (lifecycle) => {
+          let WOName = 'WO-XXX-XXX';
           // Delete the error demo
-          await mir.deleteLatestExecuting();
+          if (IS_PRODUCTION) {
+            await mir.deleteLatestExecuting();
+            WOName = await twx.getProperty('AGV_Arcstone_Demo', 'CreateWOName');
+          }
 
-          const WOName = await twx.getProperty('AGV_Arcstone_Demo', 'CreateWOName');
+          // Text UI
           content.maintenanceDone.text.splice(0, 1, `Maintenance W.O ID: ${WOName} is completed.`);
           socket.send(content.maintenanceDone);
 
@@ -135,6 +148,10 @@ class Flow {
         },
       },
     });
+
+    this.nextState = () => {
+      // TODO: Control by the control UI
+    };
   }
 }
 module.exports = Flow;
