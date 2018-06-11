@@ -126,7 +126,6 @@ class Flow {
           let WOName = 'WO#####';
           // Delete the error demo
           if (IS_PRODUCTION) {
-            await mir.deleteLatestExecuting();
             WOName = await twx.getProperty('AGV_Arcstone_Demo', 'CreateWOName');
           }
           // Text UI
