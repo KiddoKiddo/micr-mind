@@ -3,26 +3,118 @@
 
 <head>
   <meta charset="utf-8">
-  <title></title>
+  <title>Control</title>
   <meta name="author" content="">
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
 
   <link href="css/control.css" rel="stylesheet">
 </head>
 
 <body>
-
-  <p></p>
   <div class="grid-container">
-    <div class="state-container"></div>
-
-
+    <h1>MICR Mind Control</h1>
+    <div class="button-container">
+      <div>
+        <button id="update-clients" class="btn btn-secondary">Update clients</button>
+      </div>
+      <div id="clients">
+        <div class="dropdown form-group">
+          <select class="form-control"></select>
+        </div>
+      </div>
+      <div>
+        <button method="step" class="btn btn-success btn-control">NEXT</button>
+      </div>
+      <div>
+        <button method="toIdle" class="btn btn-info btn-control">TO IDLE</button>
+      </div>
+      <div>
+        <button method="toInit" class="btn btn-warning btn-control">TO INIT</button>
+      </div>
+      <div>
+        <button method="reload" class="btn btn-secondary btn-control">RELOAD</button>
+      </div>
+      <div id="msg-panel" class="border border-dark rounded"></div>
+      <div id="state-panel">
+        <div id="init" class="state"><span class="badge badge-secondary">init</span></div>
+        <div id="idle" class="state"><span class="badge badge-secondary">idle</span></div>
+        <div id="task" class="state"><span class="badge badge-secondary">task</span></div>
+        <div id="fault" class="state"><span class="badge badge-secondary">fault</span></div>
+        <div id="action" class="state"><span class="badge badge-secondary">action</span></div>
+        <div id="maintenance-in-progress" class="state"><span class="badge badge-secondary">maintenance-in-progress</span></div>
+        <div id="maintenance-done" class="state"><span class="badge badge-secondary">maintenance-done</span></div>
+      </div>
+    </div>
   </div>
   <script src="/socket.io/socket.io.js"></script>
   <script type="text/javascript">
+  $(function() {
+    let clients;
+    let selectedClient;
+
     // Socket IO connection
     const socket = io('/control');
+
+    // To update the latest clients
+    $('#update-clients').click(() => socket.emit('clients'))
+    socket.on('clients', (data) => {
+      clients = data.clients;
+      addMessage(`Updating clients... There are ${clients.length} clients.`);
+      generateClientOptions(data.clients);
+    });
+    function generateClientOptions(clients) {
+      $('#clients select').html(clients.map((id) => `<option>${id}</option>`));
+      if(clients.length === 1) {
+        selectedClient = clients[0];
+        socket.emit('state', { id: selectedClient });
+      }
+    }
+    $('#clients select').change((e) => {
+      selectedClient = e.target.value
+      socket.emit('state', { id: selectedClient });
+    });
+
+    // To send control
+    $('.btn-control').click((e) => {
+      const method = $(e.target).attr('method');
+      const id = selectedClient;
+      socket.emit('control', { id, method });
+    });
+
+    // To update msg
+    socket.on('message', (msg) => addMessage(msg));
+    const addMessage = (msg) => {
+      const cur = new Date();
+      const timestamp = `${cur.getHours()}:${cur.getMinutes()}:${cur.getSeconds()}`
+
+      if(typeof msg === 'string') {
+        $('#msg-panel').prepend(`<div class="alert alert-light" role="alert">${timestamp}: ${msg}</div>`);
+      } else {
+        $('#msg-panel').prepend(`<div class="alert alert-${msg.type}" role="alert">${timestamp}: ${msg.text}</div>`);
+      }
+    }
+
+    // To update state
+    let prevState = 'init';
+    socket.on('state', (data) => {
+      $(`#${prevState} span`)
+        .removeClass('badge-primary')
+        .addClass('badge-secondary');
+      $(`#${data.state} span`)
+        .removeClass('badge-secondary')
+        .addClass('badge-primary');
+      prevState = data.state;
+    })
+
+    // Update state
+    setInterval(() => socket.emit('state', { id: selectedClient }), 5000);
+  });
   </script>
 </body>
 

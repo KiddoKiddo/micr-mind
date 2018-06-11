@@ -1,0 +1,41 @@
+.random-message-container {
+  postion: relative;
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+  padding: 20px;
+  overflow: hidden;
+}
+.random-message-cover {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background:
+    linear-gradient(0deg, rgba(19,19,32,1) 60%, rgba(0,0,0,0) 100%);
+}
+.random-messsage {
+  font-size: 30px;
+  padding: .5em 1em;
+  margin-bottom: 0.5em;
+  border: 1px solid transparent;
+  border-radius: 20px;
+}
+.random-messsage:first-of-type {
+  font-size: 40px;
+  transition: all 1s;
+}
+.rm-ok {
+  color: #155724;
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+}
+.rm-warning {
+  color: #856404;
+  background-color: #fff3cd;
+  border-color: #ffeeba;
+}
+.rm-error {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}

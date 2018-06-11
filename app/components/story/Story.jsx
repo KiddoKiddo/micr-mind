@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import io from '../../socket-api';
 import Blink from './blink/Blink';
+import RandomMessage from './RandomMessage';
 
 require('./Story.css');
 const classNames = require('classnames');
@@ -16,20 +17,21 @@ class Story extends React.Component {
 
     this.state = {
       message: {},
+      randomMessages: [],
       fault: false,
       sound: false,
-      blinkPos: 'right',
-      flowState: 'init',
+      btn: false,
     };
 
     this.addMessage = this.addMessage.bind(this);
     this.renderChoices = this.renderChoices.bind(this);
     this.selectChoice = this.selectChoice.bind(this);
+    this.addRandomMessage = this.addRandomMessage.bind(this);
   }
 
   componentDidMount() {
-    // Let's manually start from controller
-    // socket.emit('start'); // To 'idle'
+    // To reload the page from controller
+    socket.on('reload', () => location.reload());
 
     // Receive message from "control"
     socket.on('message', (data) => {
@@ -42,10 +44,13 @@ class Story extends React.Component {
       }
     });
 
+    // Receive random messages
+    socket.on('random-message', msg => this.addRandomMessage(msg));
+
     // Receive the fault from "control"
     socket.on('fault', fault => this.setState({ fault }));
     socket.on('sound', sound => this.setState({ sound }));
-    socket.on('state', flowState => this.stState({ flowState }));
+    socket.on('btn', btn => this.setState({ btn }));
   }
 
   addMessage(text, choices) {
@@ -57,6 +62,15 @@ class Story extends React.Component {
 
   // Send choices to socket
   selectChoice(choice) { socket.emit(choice); }
+
+  addRandomMessage(msg) {
+    const randomMessages = this.state.randomMessages.slice();
+    if (randomMessages.length > 20) {
+      randomMessages.pop();
+    }
+    randomMessages.unshift(Object.assign({ id: shortid.generate() }, msg));
+    this.setState({ randomMessages });
+  }
 
   // Render choices (if any)
   renderChoices(msg) {
@@ -81,11 +95,6 @@ class Story extends React.Component {
 
   render() {
     const msg = this.state.message;
-    const blinkClasses = classNames({
-      'story-blink-container': true,
-      'story-blink-container-left': this.state.blinkPos === 'left',
-      'story-blink-container-right': this.state.blinkPos === 'right',
-    });
     return (
       <div className="story-container">
         <div className="story-msg-container">
@@ -97,8 +106,11 @@ class Story extends React.Component {
             </div>
             {this.renderChoices(msg)}
           </div> }
+          <div className="story-blink-container" onClick={() => socket.emit('start')}>
+            <Blink error={this.state.fault} sound={this.state.sound} />
+          </div>
         </div>
-        <div className="story-menu-container">
+        <div className={this.state.btn ? 'story-menu-container' : 'story-menu-container hidden'} >
           <button onClick={() => socket.emit('open_app', { label: 'AGV Controller', position: 5 })}>
             Control Panel
           </button>
@@ -115,8 +127,8 @@ class Story extends React.Component {
             Simulation
           </button>
         </div>
-        <div className={blinkClasses} onClick={() => socket.emit('start')}>
-          <Blink error={this.state.fault} sound={this.state.sound} />
+        <div className="story-random-message">
+          <RandomMessage messages={this.state.randomMessages} />
         </div>
       </div>);
   }

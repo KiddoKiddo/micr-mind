@@ -1,0 +1,86 @@
+body {
+  height: 90vh;
+  background: #FFF8E1;
+  margin: 0;
+}
+.grid-container {
+  width: 100%;
+  height: 100%;
+
+  display: grid;
+  grid-auto-columns: 600px;
+  grid-auto-rows: auto;
+
+  justify-content: center;
+  align-content: center;
+}
+h1 {
+  grid-row: 1;
+}
+.button-container {
+  display: grid;
+
+  grid-gap: 10px;
+  grid-row: 2;
+  grid-template-columns: repeat(5, 1fr);
+  grid-auto-rows: auto;
+}
+.btn-control {
+  height: 40px;
+  width: 120px;
+}
+#clients {
+  grid-column: 2 / span 4;
+}
+#msg-panel {
+  grid-row: 3;
+  grid-column: 1 / span 2;
+
+  height: 300px;
+  overflow-y: scroll;
+  background: white;
+}
+#msg-panel div {
+  margin: 5px;
+  padding: 5px;
+  font-size: 10px;
+}
+#state-panel {
+  grid-row: 3;
+  grid-column: 3 / span 3;
+
+  /* display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: 50px 50px 50px; */
+}
+.state {
+  font-size: 20px;
+}
+/* #init {
+  grid-row: 1 / span 1;
+  grid-column: 1 / span 1;
+}
+#idle {
+  grid-row: 1 / span 1;
+  grid-column: 3 / span 1;
+}
+#fault {
+  grid-row: 1 / span 1;
+  grid-column: 5 / span 1;
+}
+#task {
+  grid-row: 1 / span 1;
+  grid-column: 7 / span 1;
+}
+#action {
+  grid-row: 3 / span 1;
+  grid-column: 7 / span 1;
+}
+#maintenance-in-progress {
+  grid-row: 3 / span 1;
+  grid-column: 5 / span 1;
+}
+#maintenance-done {
+  grid-row: 3 / span 1;
+  grid-column: 3 / span 1;
+} */

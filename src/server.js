@@ -9,6 +9,7 @@ const io = require('socket.io')(http);
 
 const twx = require('./utils/twx');
 const nc = require('./utils/nervecenter');
+const rm = require('./utils/random-messages');
 const Flow = require('./Flow.js');
 
 const IS_PRODUCTION = process.env.ENV === 'PRODUCTION';
@@ -32,56 +33,63 @@ io.of('/mind')
     const logger = '[mind] ';
     console.log(`${logger} *** a client connected`);
 
+    // Shoot random message
+    const randMsg = rm.scheduleRandomMessages(socket);
+
     // Init Flow for each socket client
-    const flow = new Flow(socket);
+    const flow = new Flow(socket, randMsg);
 
     // Store clients
     clients[socket.id] = flow;
 
-    // To start flow
-    socket.on('start', () => flow.fsm.reset());
-
     // Some common even to handle through out the app
     socket.on('open_app', (msg) => {
-      console.log(msg);
       const url = msg.label || 'www.google.com';
       const pos = msg.position || 1;
       if (IS_PRODUCTION) nc.placeApp(url, pos);
     });
 
-    // To update current status to 'control' client
-    setInterval(() => socket.emit('flowState', { state: flow.state }), 5000);
+    // To delete once the client disconnects
+    socket.on('disconnect', () => delete clients[socket.id]);
   });
 
 // Socket io connection for manual control state machine
 // To simulate the effect of events happened
-const control = io
-  .of('/control')
+const METHODS = ['step', 'toInit', 'toIdle', 'reload'];
+io.of('/control')
   .on('connection', (socket) => {
     const logger = '[control] ';
-    console.log(`${logger}***  a client connected`);
+    let latestId;
 
-    // // Assume first client
-    //
-    // // To stop
-    // socket.on('stop', () => flow.stop()); // To 'init'
-    //
-    // // To start flow
-    // socket.on('start', () => flow.reset()); // To 'idle'
-    //
-    // // Transmit message to 'Flow' client
-    // socket.on('send-to-Flow', (data) => {
-    //   try {
-    //     const data_json = JSON.parse(data);
-    //
-    //     // Emit to Flow if data is JSON structured.
-    //     const event = data_json.event || 'message';
-    //     const data_to_be_sent = data_json.data || '';
-    //     Flow.emit(event, data_to_be_sent);
-    //   } catch (e) {
-    //     Flow.emit('message', data);
-    //   }
-    // });
+    console.log(`${logger}***  a controller connected`);
+
+    socket.emit('clients', { clients: Object.keys(clients) });
+    socket.on('clients', () => socket.emit('clients', { clients: Object.keys(clients) }));
+
+    socket.on('control', (options) => {
+      const id = options.id;
+      const method = options.method;
+
+      if (!io.of('mind').sockets[id]) {
+        // Notes: type follows bootstrap
+        socket.send({ type: 'danger', text: `No client with id: ${id}` });
+        socket.emit('clients', { clients: Object.keys(clients) });
+      } else {
+        if (options.method === 'reload') {
+          io.of('mind').sockets[id].emit('reload');
+          // Update new client id
+          setTimeout(() => socket.emit('clients', { clients: Object.keys(clients) }), 1000);
+        } else {
+          clients[id].method(method);
+        }
+        emitState(id);
+      }
+    });
+
+    socket.on('state', (data) => {
+      if (io.of('mind').sockets[data.id]) emitState(data.id);
+    });
+    const emitState = id => socket.emit('state', { state: clients[id].fsm.state });
   });
 
 // Start express server
