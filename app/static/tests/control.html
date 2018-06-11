@@ -70,9 +70,9 @@
     });
     function generateClientOptions(clients) {
       const selectedIdx = clients.length > 1? 1 : (clients.length > 0? 0 : null);
+      console.log(selectedIdx);
       $('#clients select').html(clients.map((id, i) => `<option ${selectedIdx === i? 'selected':''}>${id}</option>`));
-      if(selectedIdx) {
-        console.log(selectedIdx);
+      if(selectedIdx != null) {
         selectedClient = clients[selectedIdx];
         socket.emit('state', { id: selectedClient });
       }

@@ -14,7 +14,7 @@
   height: 490px;
   width: 880px;
   background:
-    linear-gradient(0deg, rgba(19,19,39,0.8) 10%, rgba(0,0,0,0) 100%);
+    linear-gradient(0deg, rgba(19,19,39,0.8) 30%, rgba(0,0,0,0) 100%);
 }
 .random-messsage {
   font-size: 30px;
