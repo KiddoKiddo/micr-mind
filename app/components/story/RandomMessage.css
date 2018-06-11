@@ -1,22 +1,25 @@
 .random-message-container {
-  postion: relative;
+  position: relative;
+  height: 470px;
+  width: 880px;
   display: flex;
   flex-direction: column;
   margin: 20px;
   padding: 20px;
   overflow: hidden;
+
 }
 .random-message-cover {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  height: 490px;
+  width: 880px;
   background:
-    linear-gradient(0deg, rgba(19,19,32,1) 60%, rgba(0,0,0,0) 100%);
+    linear-gradient(0deg, rgba(19,19,32,1) 10%, rgba(0,0,0,0) 100%);
 }
 .random-messsage {
   font-size: 30px;
-  padding: .5em 1em;
-  margin-bottom: 0.5em;
+  padding: 15px 30px;
+  margin-bottom: 15px;
   border: 1px solid transparent;
   border-radius: 20px;
 }

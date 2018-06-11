@@ -105,7 +105,6 @@
 .story-random-message {
   grid-column: 6 / span 1;
   grid-row: 2 / span 1;
-  height: 500px;
 }
 
 @keyframes breathing {
