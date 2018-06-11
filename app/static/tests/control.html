@@ -69,9 +69,11 @@
       generateClientOptions(data.clients);
     });
     function generateClientOptions(clients) {
-      $('#clients select').html(clients.map((id) => `<option>${id}</option>`));
-      if(clients.length === 1) {
-        selectedClient = clients[0];
+      const selectedIdx = clients.length > 1? 1 : (clients.length > 0? 0 : null);
+      $('#clients select').html(clients.map((id, i) => `<option ${selectedIdx === i? 'selected':''}>${id}</option>`));
+      if(selectedIdx) {
+        console.log(selectedIdx);
+        selectedClient = clients[selectedIdx];
         socket.emit('state', { id: selectedClient });
       }
     }
@@ -112,8 +114,8 @@
       prevState = data.state;
     })
 
-    // Update state
-    setInterval(() => socket.emit('state', { id: selectedClient }), 5000);
+    // Update stat
+    setInterval(() => socket.emit('state', { id: selectedClient }), 3000);
   });
   </script>
 </body>
