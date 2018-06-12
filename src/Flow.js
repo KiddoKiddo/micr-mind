@@ -55,6 +55,8 @@ class Flow {
           socket.send(content.idle);
           socket.emit('fault', false); // Reset fault
           socket.emit('btn', false);
+
+          if (IS_PRODUCTION) nc.placeApp('AGV Controller', 5);
         },
         // ==========================Task================================
         onTask: (lifecycle) => {
@@ -84,6 +86,7 @@ class Flow {
         // Turn off sound
         onLeaveFault: (lifecycle) => {
           socket.emit('sound', false); // Turn off the sound
+          if (IS_PRODUCTION) nc.placeApp('PlantSim', 8);
         },
         // ==========================Action================================
         onAction: async (lifecycle) => {
