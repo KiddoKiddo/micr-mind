@@ -1,40 +1,43 @@
 module.exports = {
   init: {
-    text: ['Initialize...'],
+    text: [
+      'Overall production is running as per normal',
+    ],
   },
   idle: {
     text: [
-      'Normal operation.',
+      'Overall production is running as per normal',
     ],
   },
   task: {
     text: [
-      'AGV is in action...',
+      'Overall production is running as per normal',
     ],
   },
   fault: {
     text: [
-      'AGV encountered a problem.',
-      'Do you want to tackle the issue?',
+      'AGV "MiR 200" encountered a problem while delivering material.',
+      'Your production will be affected if this issue is not fixed',
+      'Do you want me to fix the issue?',
     ],
     choices: true,
   },
   action: {
     text: [
-      'Create maintenance WO: ',
-      'Reschedule production WO to delivery on time',
-      'Contact the maintenance personnel via email.',
+      'Creating a maintenance Work Order: ',
+      'Rescheduling production Work Order to meet on-time delivery',
+      'Contacting the maintenance personnel',
     ],
   },
   maintenanceInProgess: {
     text: [
-      'Maintenance personnel is attending the issue',
+      'Maintenance engineer is attending the issue',
     ],
   },
   maintenanceDone: {
     text: [
-      'Maintenance W.O ID: is completed.',
-      'The production resumed back to normal.',
+      'Maintenance Work Order. ID: is completed.',
+      'The production is resumed back to normal.',
     ],
   },
 };

@@ -120,9 +120,6 @@ class Story extends React.Component {
           <button onClick={() => socket.emit('open_app', { label: 'MIR', position: 6 })}>
             Smart System
           </button>
-          <button onClick={() => location.reload()} >
-            Intelligence
-          </button>
           <button onClick={() => socket.emit('open_app', { label: 'PlantSim', position: 8 })}>
             Simulation
           </button>

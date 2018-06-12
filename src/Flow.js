@@ -95,7 +95,7 @@ class Flow {
           console.log(`${loggerFsm} Create WO: ${WOName}`);
 
           // Send content to UI
-          content.action.text.splice(0, 1, `Create maintenance WO: ${WOName}`);
+          content.action.text.splice(0, 1, `Creating a maintenance Work Order: ${WOName}`);
           socket.send(content.action);
 
           // When the maintenance is in progress
@@ -129,7 +129,7 @@ class Flow {
             WOName = await twx.getProperty('AGV_Arcstone_Demo', 'CreateWOName');
           }
           // Text UI
-          content.maintenanceDone.text.splice(0, 1, `Maintenance W.O ID: ${WOName} is completed.`);
+          content.maintenanceDone.text.splice(0, 1, `Maintenance Work Order ${WOName} ID: is completed.`);
           socket.send(content.maintenanceDone);
 
           // Reset blink
@@ -142,7 +142,11 @@ class Flow {
       },
     });
 
-    this.method = method => this.fsm[method]();
+    this.method = (method) => {
+      if (this.fsm.can(method)) {
+        this.fsm[method]();
+      }
+    };
   }
 }
 module.exports = Flow;

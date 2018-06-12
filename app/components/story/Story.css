@@ -56,7 +56,7 @@
 }
 .story-msg-text {
   color: rgba(255, 255, 255, 0.9);
-  font-size: 50px;
+  font-size: 40px;
   line-height: 1.4;
 
   margin: 30px;
@@ -85,9 +85,8 @@
   border-radius: 20px;
   background-color: #2276ab;
   color: rgba(255, 255, 255, 0.8);
+  width: 300px;
   padding: 0.3em 0.5em;
-
-  margin-top: 0.6em;
   margin-left: 0.6em;
 }
 .story-msg-choices button.ok {
