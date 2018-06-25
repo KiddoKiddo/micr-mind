@@ -92,9 +92,9 @@ class Flow {
         onAction: async (lifecycle) => {
           // Create WO TWX
           let WOName = 'WO#####';
-          if (IS_PRODUCTION) {
-            WOName = await twx.executeService('AGV_Arcstone_Demo', 'CreateWO');
-          }
+          // if (IS_PRODUCTION) {
+          //   WOName = await twx.executeService('AGV_Arcstone_Demo', 'CreateWO');
+          // }
           console.log(`${loggerFsm} Create WO: ${WOName}`);
 
           // Send content to UI
@@ -102,12 +102,12 @@ class Flow {
           socket.send(content.action);
 
           // When the maintenance is in progress
-          this.interval = setInterval(async () => {
-            if (IS_TIMEOUT || await twx.getProperty('AGV_Arcstone_Demo', 'StartWO')) {
-              lifecycle.fsm.step();
-              clearInterval(this.interval);
-            }
-          }, SCAN_RATE);
+          // this.interval = setInterval(async () => {
+          //   if (IS_TIMEOUT || await twx.getProperty('AGV_Arcstone_Demo', 'StartWO')) {
+          //     lifecycle.fsm.step();
+          //     clearInterval(this.interval);
+          //   }
+          // }, SCAN_RATE);
         },
         onActionLeave: lifecycle => clearInterval(this.interval),
         // ==========================MIP================================
@@ -116,21 +116,21 @@ class Flow {
           socket.send(content.maintenanceInProgess);
 
           // When the maintenance is done
-          const interval = setInterval(async () => {
-            if (IS_TIMEOUT || await twx.getProperty('AGV_Arcstone_Demo', 'FinishWO')) {
-              lifecycle.fsm.step();
-              clearInterval(interval);
-            }
-          }, SCAN_RATE);
+          // const interval = setInterval(async () => {
+          //   if (IS_TIMEOUT || await twx.getProperty('AGV_Arcstone_Demo', 'FinishWO')) {
+          //     lifecycle.fsm.step();
+          //     clearInterval(interval);
+          //   }
+          // }, SCAN_RATE);
         },
         onMaintenanceInProgressLeave: lifecycle => clearInterval(this.interval),
         // ==========================MD================================
         onMaintenanceDone: async (lifecycle) => {
           let WOName = 'WO#####';
           // Delete the error demo
-          if (IS_PRODUCTION) {
-            WOName = await twx.getProperty('AGV_Arcstone_Demo', 'CreateWOName');
-          }
+          // if (IS_PRODUCTION) {
+          //   WOName = await twx.getProperty('AGV_Arcstone_Demo', 'CreateWOName');
+          // }
           // Text UI
           content.maintenanceDone.text.splice(0, 1, `Maintenance Work Order ${WOName} ID: is completed.`);
           socket.send(content.maintenanceDone);
