@@ -91,7 +91,7 @@ class Flow {
         // ==========================Action================================
         onAction: async (lifecycle) => {
           // Create WO TWX
-          let WOName = 'WO#####';
+          let WOName = 'WO-17/8-5';
           // if (IS_PRODUCTION) {
           //   WOName = await twx.executeService('AGV_Arcstone_Demo', 'CreateWO');
           // }
@@ -126,7 +126,7 @@ class Flow {
         onMaintenanceInProgressLeave: lifecycle => clearInterval(this.interval),
         // ==========================MD================================
         onMaintenanceDone: async (lifecycle) => {
-          let WOName = 'WO#####';
+          let WOName = 'WO-17/8-5';
           // Delete the error demo
           // if (IS_PRODUCTION) {
           //   WOName = await twx.getProperty('AGV_Arcstone_Demo', 'CreateWOName');
