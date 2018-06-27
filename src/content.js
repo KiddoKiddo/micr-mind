@@ -16,7 +16,7 @@ module.exports = {
   },
   fault: {
     text: [
-      'AGV MiR200 encountered a problem while delivering material.',
+      'AGV MiR200 encountered a problem while delivering material [ErrCode: 4729].',
       'Your production will be affected if this issue is not fixed',
       'Do you want me to fix the issue?',
     ],

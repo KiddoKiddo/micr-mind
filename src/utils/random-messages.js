@@ -10,7 +10,7 @@ module.exports = {
   scheduleRandomMessages: (socket) => {
     setTimeout(() => {
       if (module.exports.status === 0) {
-        socket.emit('random-message', module.exports.getRandomMessage());
+        socket.emit('random-message', module.exports.getOrderedMessage());
         module.exports.scheduleRandomMessages(socket);
       } else if (module.exports.status === 1) {
         module.exports.scheduleRandomMessages(socket);
@@ -32,4 +32,13 @@ module.exports = {
   getRandomMessage: () =>
     content.message[module.exports.random(0, content.message.length - 1)],
   getSpecialMessage: key => content.special[key],
+
+  ordered: -1,
+  getOrderedMessage: () => {
+    module.exports.ordered = module.exports.ordered + 1;
+    module.exports.ordered = module.exports.ordered % content.message.length;
+    console.log(module.exports.ordered);
+    console.log(content.message[module.exports.ordered]);
+    return content.message[module.exports.ordered];
+  },
 };

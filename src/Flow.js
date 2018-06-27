@@ -34,6 +34,13 @@ class Flow {
         { name: 'step', from: 'action', to: 'maintenance-in-progress' },
         { name: 'step', from: 'maintenance-in-progress', to: 'maintenance-done' },
         { name: 'step', from: 'maintenance-done', to: 'idle' },
+        // To step back the flow
+        { name: 'back', from: 'task', to: 'idle' },
+        { name: 'back', from: 'fault', to: 'task' },
+        { name: 'back', from: 'action', to: 'fault' },
+        { name: 'back', from: 'maintenance-in-progress', to: 'action' },
+        { name: 'back', from: 'maintenance-done', to: 'maintenance-in-progress' },
+        { name: 'back', from: 'idle', to: 'maintenance-done' },
         // To reset anytime to either 'idle' 'init' 'task' 'fault'
         { name: 'toIdle', from: '*', to: 'idle' },
         { name: 'toInit', from: '*', to: 'init' },
@@ -146,9 +153,7 @@ class Flow {
     });
 
     this.method = (method) => {
-      if (this.fsm.can(method)) {
-        this.fsm[method]();
-      }
+      if (this.fsm.can(method)) this.fsm[method]();
     };
   }
 }
