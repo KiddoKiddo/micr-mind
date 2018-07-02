@@ -35,10 +35,7 @@ module.exports = {
 
   ordered: -1,
   getOrderedMessage: () => {
-    module.exports.ordered = module.exports.ordered + 1;
-    module.exports.ordered = module.exports.ordered % content.message.length;
-    console.log(module.exports.ordered);
-    console.log(content.message[module.exports.ordered]);
+    module.exports.ordered = (module.exports.ordered + 1) % content.message.length;
     return content.message[module.exports.ordered];
   },
 };
