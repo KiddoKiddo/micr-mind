@@ -104,6 +104,14 @@
 .story-random-message {
   grid-column: 2 / span 1;
   grid-row: 2 / span 1;
+  height: 490px;
+}
+.story-title {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 60px;
+  text-shadow: 2px 8px 6px rgba(0,0,0,0.2),
+              0px -5px 60px rgba(255,255,255,0.8);
 }
 
 @keyframes breathing {

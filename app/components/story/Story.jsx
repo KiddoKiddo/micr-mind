@@ -107,6 +107,7 @@ class Story extends React.Component {
             {this.renderChoices(msg)}
           </div> }
           <div className="story-blink-container" onClick={() => socket.emit('start')}>
+            <div className="story-title">Heartbeat</div>
             <Blink error={this.state.fault} sound={this.state.sound} />
           </div>
         </div>
@@ -125,6 +126,7 @@ class Story extends React.Component {
           </button>
         </div>
         <div className="story-random-message">
+          <div className="story-title">Smart Notifications</div>
           <RandomMessage messages={this.state.randomMessages} />
         </div>
       </div>);
