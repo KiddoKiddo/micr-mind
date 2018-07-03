@@ -57,6 +57,7 @@ class Flow {
           // TODO: Why onInit enter two times
           socket.send(content.init);
           socket.emit('fault', false); // Reset fault
+          randMsg.resume(); // If it ever pause before
         },
         // ==========================Idle================================
         onIdle: (lifecycle) => {
