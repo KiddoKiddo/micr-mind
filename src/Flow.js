@@ -98,12 +98,14 @@ class Flow {
         },
         // ==========================Action================================
         onAction: async (lifecycle) => {
+          socket.send({ text: ['Creating a Maintenance Work Order...'] });
+
           // Create WO TWX
           this.WOName = await twx.executeService('AGV_Arcstone_Demo', 'CreateWO');
           console.log(`${loggerFsm} Create WO: ${this.WOName}`);
 
           // Send content to UI
-          content.action.text.splice(0, 1, `Creating a maintenance Work Order: ${this.WOName}`);
+          content.action.text.splice(0, 1, `Maintenance Work Order created: ${this.WOName}`);
           socket.send(content.action);
 
           // When the maintenance is in progress

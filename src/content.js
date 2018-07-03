@@ -24,7 +24,7 @@ module.exports = {
   },
   action: {
     text: [
-      'Creating a maintenance Work Order: ',
+      'Maintenance Work Order created: ',
       'Rescheduling production Work Order to meet on-time delivery',
       'Contacting the maintenance personnel',
     ],
