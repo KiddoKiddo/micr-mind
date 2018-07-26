@@ -79,6 +79,9 @@ class Flow {
           // Text to UI
           socket.send(content.fault);
 
+          // Remove AGV
+          nc.removeWindshield('AGV Controller');
+
           // UI control
           socket.emit('fault', true);
           if (IS_SOUND) socket.emit('sound', true);

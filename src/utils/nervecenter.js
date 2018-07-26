@@ -85,6 +85,35 @@ const nc = {
 
     return true;
   },
+  removeWindshield: async (keyword) => {
+    if (!keyword) {
+      console.log('[ERR] No keyword provided.');
+      return false;
+    }
+
+    console.log(`[nervecenter] Remove windshield with label ${keyword}`);
+
+    const apps = await module.exports.getApps();
+    const app = apps.find(item =>
+      (item.label && item.label.includes(keyword)) || item.url.includes(keyword));
+
+    if (!app) {
+      console.log(`[nervecenter] No app with the label or url contains ${keyword}`);
+      return false;
+    }
+
+    if (app.windshieldIds.length === 0) {
+      console.log(`[nervecenter] No windshield with label contains ${keyword}`);
+      return false;
+    }
+    const windshieldId = app.windshieldIds[0].id; // Assume only one screen
+    axios.delete(`http://${host}/api/v2/item/${windshieldId}`,
+      { headers: defaultHeaders })
+      .then(response => response.data)
+      .catch(error => console.log(error.response));
+      // .catch(error => console.log(`${error.response.status} - ${error.response.statusText}`));
+    return true;
+  },
 };
 
 module.exports = nc;
