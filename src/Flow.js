@@ -71,6 +71,10 @@ class Flow {
         onTask: (lifecycle) => {
           socket.send(content.task);
 
+          // Remove AGV, place Live Stream
+          nc.placeApp('Live Stream', 5);
+          nc.removeWindshield('AGV Controller');
+
           // Show AGV map (Quuppa)
           if (IS_PRODUCTION) nc.placeApp('QUUPPA', 7);
         },
@@ -78,9 +82,6 @@ class Flow {
         onFault: (lifecycle) => {
           // Text to UI
           socket.send(content.fault);
-
-          // Remove AGV
-          nc.removeWindshield('AGV Controller');
 
           // UI control
           socket.emit('fault', true);
