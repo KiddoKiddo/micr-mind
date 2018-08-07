@@ -85,12 +85,16 @@ class Flow {
 
           // UI control
           socket.emit('fault', true);
-          if (IS_SOUND) socket.emit('sound', true);
+          if (IS_SOUND) {
+            socket.emit('sound', true);
+            setTimeout(() => socket.emit('sound', false), 5000);
+          }
           socket.emit('btn', true);
 
           // Pause random msg
           randMsg.pause();
           randMsg.sendSpecialMessage('agv-fault');
+
 
           // Wait for response
           socket.once('OK', () => lifecycle.fsm.step()); // Go to 'action'
@@ -98,7 +102,7 @@ class Flow {
         },
         // Turn off sound
         onLeaveFault: (lifecycle) => {
-          socket.emit('sound', false); // Turn off the sound
+          // socket.emit('sound', false); // Turn off the sound
           if (IS_PRODUCTION) nc.placeApp('PlantSim', 8);
         },
         // ==========================Action================================
