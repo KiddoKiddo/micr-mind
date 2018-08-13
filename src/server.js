@@ -49,6 +49,14 @@ io.of('/mind')
       if (IS_PRODUCTION) nc.placeApp(url, pos);
     });
 
+    // Wait for response
+    socket.on('OK', () => {
+      if (flow.can('step')) flow.step();
+    }); // Go to 'action'
+    socket.on('Cancel', () => {
+      if (flow.can('toIdle')) flow.toIdle();
+    }); // Back to 'idle'
+
     // To delete once the client disconnects
     socket.on('disconnect', () => delete clients[socket.id]);
   });
@@ -89,7 +97,7 @@ io.of('/control')
     socket.on('state', (data) => {
       if (io.of('mind').sockets[data.id]) emitState(data.id);
     });
-    const emitState = id => socket.emit('state', { state: clients[id].fsm.state });
+    const emitState = id => socket.emit('state', { state: clients[id] && clients[id].fsm.state });
   });
 
 // Start express server

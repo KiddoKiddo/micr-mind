@@ -97,8 +97,12 @@ class Flow {
 
 
           // Wait for response
-          socket.once('OK', () => lifecycle.fsm.step()); // Go to 'action'
-          socket.once('Cancel', () => lifecycle.fsm.toIdle()); // Back to 'idle'
+          socket.once('OK', () => {
+            if (lifecycle.fsm.can('step')) lifecycle.fsm.step();
+          }); // Go to 'action'
+          socket.once('Cancel', () => {
+            if (lifecycle.fsm.can('toIdle')) lifecycle.fsm.toIdle();
+          }); // Back to 'idle'
         },
         // Turn off sound
         onLeaveFault: (lifecycle) => {
