@@ -51,10 +51,12 @@ io.of('/mind')
 
     // Wait for response
     socket.on('OK', () => {
-      if (flow.can('step')) flow.step();
+      console.log(`${logger} OK`);
+      if (flow.fsm.can('step')) flow.fsm.step();
     }); // Go to 'action'
     socket.on('Cancel', () => {
-      if (flow.can('toIdle')) flow.toIdle();
+      console.log(`${logger} Cancel`);
+      if (flow.fsm.can('toIdle')) flow.fsm.toIdle();
     }); // Back to 'idle'
 
     // To delete once the client disconnects

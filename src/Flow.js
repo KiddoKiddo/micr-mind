@@ -47,6 +47,7 @@ class Flow {
         { name: 'toInit', from: '*', to: 'init' },
         { name: 'toTask', from: '*', to: 'task' },
         { name: 'toFault', from: '*', to: 'fault' },
+        { name: 'goto', from: '*', to: s => s },
       ],
       methods: {
         onEnterState: (lifecycle) => {
@@ -71,12 +72,14 @@ class Flow {
         onTask: (lifecycle) => {
           socket.send(content.task);
 
-          // Remove AGV, place Live Stream
-          nc.placeApp('Live Stream', 5);
-          nc.removeWindshield('AGV Controller');
 
-          // Show AGV map (Quuppa)
-          if (IS_PRODUCTION) nc.placeApp('QUUPPA', 7);
+          if (IS_PRODUCTION) {
+            // Remove AGV, place Live Stream
+            nc.placeApp('Live Stream', 5);
+
+            // Show AGV map (Quuppa)
+            if (IS_PRODUCTION) nc.placeApp('QUUPPA', 7);
+          }
         },
         // ==========================Fault================================
         onFault: (lifecycle) => {
@@ -95,14 +98,13 @@ class Flow {
           randMsg.pause();
           randMsg.sendSpecialMessage('agv-fault');
 
-
-          // Wait for response
-          socket.once('OK', () => {
-            if (lifecycle.fsm.can('step')) lifecycle.fsm.step();
-          }); // Go to 'action'
-          socket.once('Cancel', () => {
-            if (lifecycle.fsm.can('toIdle')) lifecycle.fsm.toIdle();
-          }); // Back to 'idle'
+          // // Wait for response
+          // socket.once('OK', () => {
+          //   if (lifecycle.fsm.can('step')) lifecycle.fsm.step();
+          // }); // Go to 'action'
+          // socket.once('Cancel', () => {
+          //   if (lifecycle.fsm.can('toIdle')) lifecycle.fsm.toIdle();
+          // }); // Back to 'idle'
         },
         // Turn off sound
         onLeaveFault: (lifecycle) => {
