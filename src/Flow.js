@@ -75,6 +75,7 @@ class Flow {
 
           if (IS_PRODUCTION) {
             // Remove AGV, place Live Stream
+            nc.removeWindshield('AGV Controller');
             nc.placeApp('Live Stream', 5);
 
             // Show AGV map (Quuppa)
